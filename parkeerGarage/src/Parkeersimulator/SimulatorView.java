@@ -9,12 +9,17 @@ public class SimulatorView extends JFrame {
     private int numberOfRows;
     private int numberOfPlaces;
     private int numberOfOpenSpots;
+    private int numberOfReservedSpots; //Toegevoegd
     private Car[][][] cars;
 
-    public SimulatorView(int numberOfFloors, int numberOfRows, int numberOfPlaces) {
+    public SimulatorView(int numberOfFloors, int numberOfRows, int numberOfPlaces, int numberOfReservedSpots) {
+    	
+    	super("City Parking - Groningen");//Voegt titel toe aan het programma :)
+    	
         this.numberOfFloors = numberOfFloors;
         this.numberOfRows = numberOfRows;
         this.numberOfPlaces = numberOfPlaces;
+        this.numberOfReservedSpots = numberOfReservedSpots;  //Toegevoegd
         this.numberOfOpenSpots =numberOfFloors*numberOfRows*numberOfPlaces;
         cars = new Car[numberOfFloors][numberOfRows][numberOfPlaces];
         
@@ -31,6 +36,16 @@ public class SimulatorView extends JFrame {
     public void updateView() {
         carParkView.updateView();
     }
+    
+    /*
+     * Begin code blok voor het opvragen van het aantal gereserveerde plekken. (toegevoegd)
+     */
+    public int getNumberOfReservedSpots() {
+    	return numberOfReservedSpots;
+    }
+    /*
+     * Einde code blok voor het opvragen van het aantal gereserveerde plekken. (toegevoegd)
+     */
     
 	public int getNumberOfFloors() {
         return numberOfFloors;
@@ -152,7 +167,7 @@ public class SimulatorView extends JFrame {
          * Overridden. Tell the GUI manager how big we would like to be.
          */
         public Dimension getPreferredSize() {
-            return new Dimension(800, 500);
+            return new Dimension(860, 560); //Aangepast, was 800,500
         }
     
         /**

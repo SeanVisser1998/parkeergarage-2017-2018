@@ -1,9 +1,5 @@
 package Parkeersimulator;
-/**
- * 
- * @author Sean Visser
- *
- */
+
 public class Main extends Simulator{
 	
 	/*
