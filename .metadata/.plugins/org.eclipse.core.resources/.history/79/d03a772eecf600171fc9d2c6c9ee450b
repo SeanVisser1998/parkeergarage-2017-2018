@@ -1,0 +1,16 @@
+package Parkeersimulator;
+/**
+ * 
+ * @author Sean Visser
+ *
+ */
+public class Main extends Simulator{
+	
+	
+	public static void main(String args[]) {
+		Simulator sim = new Simulator();
+		sim.run();
+		
+	}
+
+}

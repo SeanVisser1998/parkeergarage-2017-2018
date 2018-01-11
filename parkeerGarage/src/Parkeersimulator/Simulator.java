@@ -1,26 +1,15 @@
 package Parkeersimulator;
 
 import java.util.Random;
-import java.awt.Color;
-import javax.swing.JToolBar;
-import java.awt.BorderLayout;
-import javax.swing.JTabbedPane;
-import javax.swing.JTextField;
-import javax.swing.UIManager;
-import java.awt.Toolkit;
-import javax.swing.JLabel;
-import javax.swing.JProgressBar;
 
 public class Simulator {
 
 	private static final String AD_HOC = "1";
 	private static final String PASS = "2";
-	private static final String RES = "3"; //toegevoegd
 	
 	
 	private CarQueue entranceCarQueue;
     private CarQueue entrancePassQueue;
-    private CarQueue entranceResQueue; //toegevoegd
     private CarQueue paymentCarQueue;
     private CarQueue exitCarQueue;
     private SimulatorView simulatorView;
@@ -31,24 +20,10 @@ public class Simulator {
 
     private int tickPause = 100;
 
-    int weekDayArrivals= 100; // average number of arriving cars per hour //100
-    int weekendArrivals = 200; // average number of arriving cars per hour //200
-    
-    /*
-     * Pashouders zijn mensen met abbonementen??
-     * Zo ja,  
-     */
-    
-    int weekDayPassArrivals= 500; // average number of arriving cars per hour //50
-    int weekendPassArrivals = 5; // average number of arriving cars per hour //5
-    int percentagePassReserveerd = 10; //toegevoegd
-    int percPassResOmgezet = (percentagePassReserveerd/100);
-    
-    /*
-     * Auto's die gereserveerd hebben, die per dag binnen komen, kunnen alleen mensen met een pas zijn :/
-     */
-    int weekReservedArrivals = weekDayPassArrivals*percentagePassReserveerd; //Toegevoegd  
-    int weekendReservedArrivals = 50; //Toegevoegd
+    int weekDayArrivals= 100; // average number of arriving cars per hour
+    int weekendArrivals = 200; // average number of arriving cars per hour
+    int weekDayPassArrivals= 50; // average number of arriving cars per hour
+    int weekendPassArrivals = 5; // average number of arriving cars per hour
 
     int enterSpeed = 3; // number of cars that can enter per minute
     int paymentSpeed = 7; // number of cars that can pay per minute
@@ -57,14 +32,9 @@ public class Simulator {
     public Simulator() {
         entranceCarQueue = new CarQueue();
         entrancePassQueue = new CarQueue();
-        entranceResQueue = new CarQueue(); //toegevoegd
         paymentCarQueue = new CarQueue();
         exitCarQueue = new CarQueue();
-        simulatorView = new SimulatorView(3, 6, 30, 10);
-        simulatorView.setIconImage(Toolkit.getDefaultToolkit().getImage(Simulator.class.getResource("/javax/swing/plaf/metal/icons/ocean/homeFolder.gif")));
-        simulatorView.setResizable(false);
-        simulatorView.setBackground(Color.DARK_GRAY);
-        simulatorView.getContentPane().setBackground(Color.DARK_GRAY);
+        simulatorView = new SimulatorView(3, 6, 30);
     }
 
     public void run() {
@@ -106,8 +76,7 @@ public class Simulator {
     private void handleEntrance(){
     	carsArriving();
     	carsEntering(entrancePassQueue);
-    	carsEntering(entranceCarQueue);  
-    	carsEntering(entranceResQueue);
+    	carsEntering(entranceCarQueue);  	
     }
     
     private void handleExit(){
@@ -127,8 +96,6 @@ public class Simulator {
         addArrivingCars(numberOfCars, AD_HOC);    	
     	numberOfCars=getNumberOfCars(weekDayPassArrivals, weekendPassArrivals);
         addArrivingCars(numberOfCars, PASS);    	
-        numberOfCars=getNumberOfCars(weekReservedArrivals, weekendReservedArrivals); //toegevoegd
-        addArrivingCars(numberOfCars, RES); //toegevoegd
     }
 
     private void carsEntering(CarQueue queue){
@@ -205,12 +172,7 @@ public class Simulator {
             for (int i = 0; i < numberOfCars; i++) {
             	entrancePassQueue.addCar(new ParkingPassCar());
             }
-            break;
-    	case RES:
-            for (int i = 0; i < numberOfCars; i++) {
-            	entrancePassQueue.addCar(new ReservedCar());
-            }
-            break;
+            break;	            
     	}
     }
     
