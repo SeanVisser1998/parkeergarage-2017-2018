@@ -8,13 +8,16 @@ public abstract class Car {
     private int minutesLeft;
     private boolean isPaying;
     private boolean hasToPay;
-
+    private boolean hasToPayFee; //toegevoegd
+    
     /**
      * Constructor for objects of class Car
      */
     public Car() {
 
     }
+    
+    
 
     public Location getLocation() {
         return location;
@@ -47,6 +50,19 @@ public abstract class Car {
     public void setHasToPay(boolean hasToPay) {
         this.hasToPay = hasToPay;
     }
+    
+    /*
+     * Code blok voor het bepalen of iemand een Fee moet betalen(mensen met reservering)
+     */
+    
+    public boolean getHasToPayFee() {
+    	return hasToPayFee;
+    }
+    
+    public void setHasToPayFee(boolean hasToPayFee) {
+    	this.hasToPayFee = hasToPayFee;
+    }
+    //Einde code blok voor reservering fees
 
     public void tick() {
         minutesLeft--;
