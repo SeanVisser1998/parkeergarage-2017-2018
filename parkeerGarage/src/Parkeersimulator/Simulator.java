@@ -41,13 +41,13 @@ public class Simulator {
     
     int weekDayPassArrivals= 500; // average number of arriving cars per hour //50
     int weekendPassArrivals = 5; // average number of arriving cars per hour //5
-    int percentagePassReserveerd = 10; //toegevoegd
-    int percPassResOmgezet = (percentagePassReserveerd/100);
+    int percentagePassReserveerd = 90; //toegevoegd
+    int percPassResOmgezet = percentagePassReserveerd/100*weekDayPassArrivals;
     
     /*
-     * Auto's die gereserveerd hebben, die per dag binnen komen, kunnen alleen mensen met een pas zijn :/
+     * Auto's die gereserveerd hebben
      */
-    int weekReservedArrivals = weekDayPassArrivals*percentagePassReserveerd; //Toegevoegd  
+    int weekReservedArrivals = 500; //toegevoegd 
     int weekendReservedArrivals = 50; //Toegevoegd
 
     int enterSpeed = 3; // number of cars that can enter per minute
