@@ -8,8 +8,7 @@ public abstract class Car {
     private int minutesLeft;
     private boolean isPaying;
     private boolean hasToPay;
-    private boolean hasToPayFee; //toegevoegd
-    
+    private boolean hasToPayFee; //toegevoegd Sean Visser 
     /**
      * Constructor for objects of class Car
      */

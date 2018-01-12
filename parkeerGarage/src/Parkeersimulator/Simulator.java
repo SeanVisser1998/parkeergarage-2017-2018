@@ -15,15 +15,17 @@ public class Simulator {
 
 	private static final String AD_HOC = "1";
 	private static final String PASS = "2";
-	private static final String RES = "3"; //toegevoegd
+	private static final String RES = "3"; //toegevoegd Sean Visser
 	
 	
 	private CarQueue entranceCarQueue;
     private CarQueue entrancePassQueue;
-    private CarQueue entranceResQueue; //toegevoegd
+    private CarQueue entranceResQueue; //toegevoegd Sean Visser
     private CarQueue paymentCarQueue;
     private CarQueue exitCarQueue;
+    
     private SimulatorView simulatorView;
+    private SimulatorReservedView simulatorReservedView; //toegevoegd Sean Visser
 
     private int day = 0;
     private int hour = 0;
@@ -39,16 +41,16 @@ public class Simulator {
      * Zo ja,  
      */
     
-    int weekDayPassArrivals= 500; // average number of arriving cars per hour //50
+    int weekDayPassArrivals= 50; // average number of arriving cars per hour //50
     int weekendPassArrivals = 5; // average number of arriving cars per hour //5
-    int percentagePassReserveerd = 90; //toegevoegd
+    int percentagePassReserveerd = 90; //toegevoegd Sean Visser
     int percPassResOmgezet = percentagePassReserveerd/100*weekDayPassArrivals;
     
     /*
      * Auto's die gereserveerd hebben
      */
-    int weekReservedArrivals = 500; //toegevoegd 
-    int weekendReservedArrivals = 50; //Toegevoegd
+    int weekReservedArrivals = 30; //toegevoegd Sean Visser
+    int weekendReservedArrivals = 5; //Toegevoegd Sean Visser
 
     int enterSpeed = 3; // number of cars that can enter per minute
     int paymentSpeed = 7; // number of cars that can pay per minute
@@ -57,14 +59,32 @@ public class Simulator {
     public Simulator() {
         entranceCarQueue = new CarQueue();
         entrancePassQueue = new CarQueue();
-        entranceResQueue = new CarQueue(); //toegevoegd
+        entranceResQueue = new CarQueue(); //toegevoegd Sean Visser
         paymentCarQueue = new CarQueue();
         exitCarQueue = new CarQueue();
-        simulatorView = new SimulatorView(3, 6, 30, 10);
+        /*
+         * Code blok voor NIET gereserveerde plekken 
+         */
+        simulatorView = new SimulatorView(3, 6, 30);
         simulatorView.setIconImage(Toolkit.getDefaultToolkit().getImage(Simulator.class.getResource("/javax/swing/plaf/metal/icons/ocean/homeFolder.gif")));
         simulatorView.setResizable(false);
         simulatorView.setBackground(Color.DARK_GRAY);
         simulatorView.getContentPane().setBackground(Color.DARK_GRAY);
+        //Einde
+        
+        /*
+         * Sean Visser
+         * 12-01-2018
+         * Code blok voor WEL gereserveerde plekken (toegevoegd)
+         */
+        simulatorReservedView = new SimulatorReservedView(1, 6, 30);
+        simulatorReservedView.setIconImage(Toolkit.getDefaultToolkit().getImage(Simulator.class.getResource("/javax/swing/plaf/metal/icons/ocean/homeFolder.gif")));
+        simulatorReservedView.setResizable(false);
+        simulatorReservedView.setBackground(Color.DARK_GRAY);
+        simulatorReservedView.getContentPane().setBackground(Color.DARK_GRAY);
+        //Einde
+        
+        
     }
 
     public void run() {
@@ -132,6 +152,9 @@ public class Simulator {
     }
 
     private void carsEntering(CarQueue queue){
+    	/*
+    	 * Opmerking: If-statement maken om onderscheidt te maken tussen gereserveerde auto's en niet-gereserveerde auto's!
+    	 */
         int i=0;
         // Remove car from the front of the queue and assign to a parking space.
     	while (queue.carsInQueue()>0 && 

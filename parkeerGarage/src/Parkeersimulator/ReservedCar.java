@@ -4,10 +4,8 @@ import java.awt.Color;
 import java.util.Random;
 
 /*
- * 
  * Sean Visser
  * 11-01-2018
- *
  */
 public class ReservedCar extends Car{
 	private static final Color COLOR=Color.CYAN;
@@ -21,6 +19,7 @@ public class ReservedCar extends Car{
 		
 	}
 
+	
 	public Color getColor() {
 		return COLOR;
 	}

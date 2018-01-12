@@ -1,44 +1,59 @@
 package Parkeersimulator;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Image;
 
-public class SimulatorView extends JFrame {
-    /**
-	 * 
+import javax.swing.JFrame;
+/*
+ * Sean Visser
+ * 12-01-2018
+ */
+import javax.swing.JPanel;
+
+public class SimulatorReservedView extends JFrame{
+	
+	/*
+	 * TODO: Aparte view aanmaken voor gereserveerde plekken
 	 */
-	private static final long serialVersionUID = 1L;
-	private CarParkView carParkView;
+	
+	private CarParkView carParkReservedView;
     private int numberOfFloors;
     private int numberOfRows;
     private int numberOfPlaces;
     private int numberOfOpenSpots;
     private Car[][][] cars;
-
-    public SimulatorView(int numberOfFloors, int numberOfRows, int numberOfPlaces) {
+    
+    public SimulatorReservedView(int numberOfFloors, int numberOfRows, int numberOfPlaces) {
     	
     	super("City Parking - Groningen");//Voegt titel toe aan het programma :)
     	
-        this.numberOfFloors = numberOfFloors;
+    	this.numberOfFloors = numberOfFloors;
         this.numberOfRows = numberOfRows;
         this.numberOfPlaces = numberOfPlaces;
+        
         this.numberOfOpenSpots =numberOfFloors*numberOfRows*numberOfPlaces;
         cars = new Car[numberOfFloors][numberOfRows][numberOfPlaces];
         
-        carParkView = new CarParkView();
-
+        carParkReservedView = new CarParkView();
+        
         Container contentPane = getContentPane();
-        contentPane.add(carParkView, BorderLayout.CENTER);
+        contentPane.add(carParkReservedView, BorderLayout.CENTER);
         pack();
         setVisible(true);
 
         updateView();
+    	
     }
 
     public void updateView() {
-        carParkView.updateView();
+        carParkReservedView.updateView();
     }
-        
+    
+    
 	public int getNumberOfFloors() {
         return numberOfFloors;
     }
@@ -61,7 +76,7 @@ public class SimulatorView extends JFrame {
         }
         return cars[location.getFloor()][location.getRow()][location.getPlace()];
     }
-
+    
     public boolean setCarAt(Location location, Car car) {
         if (!locationIsValid(location)) {
             return false;
@@ -145,11 +160,7 @@ public class SimulatorView extends JFrame {
     
     private class CarParkView extends JPanel {
         
-        /**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
-		private Dimension size;
+        private Dimension size;
         private Image carParkImage;    
     
         /**
@@ -197,7 +208,7 @@ public class SimulatorView extends JFrame {
                     for(int place = 0; place < getNumberOfPlaces(); place++) {
                         Location location = new Location(floor, row, place);
                         Car car = getCarAt(location);
-                        Color color = car == null ? Color.white : car.getColor();
+                        Color color = car == null ? Color.pink : car.getColor();
                         drawPlace(graphics, location, color);
                     }
                 }
