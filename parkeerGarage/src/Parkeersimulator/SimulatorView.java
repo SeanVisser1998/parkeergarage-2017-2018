@@ -4,9 +4,11 @@ import javax.swing.*;
 import java.awt.*;
 
 public class SimulatorView extends JFrame {
-    /**
-	 * 
+
+	/*
+	 * Class die 'Simulator' op het scherm weergeeft
 	 */
+	
 	private static final long serialVersionUID = 1L;
 	private CarParkView carParkView;
     private int numberOfFloors;

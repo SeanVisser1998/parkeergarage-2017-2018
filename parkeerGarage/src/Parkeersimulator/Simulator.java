@@ -3,27 +3,26 @@ package Parkeersimulator;
 import java.util.Random;
 import java.awt.Color;
 import java.awt.Toolkit;
-import javax.swing.JLabel;
 import java.awt.BorderLayout;
-import java.awt.Font;
 import javax.swing.JPanel;
 
 
 public class Simulator implements Runnable{
+	
+	/*
+	 * Simulator voor de 'normale' auto's.
+	 */
 
 	private static final String AD_HOC = "1";
 	private static final String PASS = "2";
-	private static final String RES = "3"; //toegevoegd Sean Visser
 	
 	
 	private CarQueue entranceCarQueue;
     private CarQueue entrancePassQueue;
-    private CarQueue entranceResQueue; //toegevoegd Sean Visser
     private CarQueue paymentCarQueue;
     private CarQueue exitCarQueue;
     
     private SimulatorView simulatorView;
-    private SimulatorReservedView simulatorReservedView; //toegevoegd Sean Visser
 
     private int day = 0;
     private int hour = 0;
@@ -38,12 +37,6 @@ public class Simulator implements Runnable{
     int weekendPassArrivals = 5; // average number of arriving cars per hour //5
     int percentagePassReserveerd = 90; //toegevoegd Sean Visser
     int percPassResOmgezet = percentagePassReserveerd/100*weekDayPassArrivals;
-    
-    /*
-     * Auto's die gereserveerd hebben
-     */
-    int weekReservedArrivals = 30; //toegevoegd Sean Visser
-    int weekendReservedArrivals = 5; //Toegevoegd Sean Visser
 
     int enterSpeed = 3; // number of cars that can enter per minute
     int paymentSpeed = 7; // number of cars that can pay per minute
@@ -52,7 +45,6 @@ public class Simulator implements Runnable{
     public Simulator() {
         entranceCarQueue = new CarQueue();
         entrancePassQueue = new CarQueue();
-        entranceResQueue = new CarQueue(); //toegevoegd Sean Visser
         paymentCarQueue = new CarQueue();
         exitCarQueue = new CarQueue();
         
@@ -114,7 +106,6 @@ public class Simulator implements Runnable{
     	carsArriving();
     	carsEntering(entrancePassQueue);
     	carsEntering(entranceCarQueue);  
-    	carsEntering(entranceResQueue);
     }
     
     private void handleExit(){
@@ -134,8 +125,6 @@ public class Simulator implements Runnable{
         addArrivingCars(numberOfCars, AD_HOC);    	
     	numberOfCars=getNumberOfCars(weekDayPassArrivals, weekendPassArrivals);
         addArrivingCars(numberOfCars, PASS);    	
-        numberOfCars=getNumberOfCars(weekReservedArrivals, weekendReservedArrivals); //toegevoegd
-        addArrivingCars(numberOfCars, RES); //toegevoegd
     }
 
     private void carsEntering(CarQueue queue){
@@ -211,11 +200,6 @@ public class Simulator implements Runnable{
     	case PASS:
             for (int i = 0; i < numberOfCars; i++) {
             	entrancePassQueue.addCar(new ParkingPassCar());
-            }
-            break;
-    	case RES:
-            for (int i = 0; i < numberOfCars; i++) {
-            	entrancePassQueue.addCar(new ReservedCar());
             }
             break;
     	}

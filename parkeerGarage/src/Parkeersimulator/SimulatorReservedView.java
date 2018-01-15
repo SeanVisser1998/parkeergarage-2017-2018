@@ -17,9 +17,10 @@ import javax.swing.JPanel;
 public class SimulatorReservedView extends JFrame{
 	
 	/*
-	 * TODO: Aparte view aanmaken voor gereserveerde plekken
+	 * Class die 'SimulatorReserved' op het scherm weergeeft.
 	 */
-	
+
+	private static final long serialVersionUID = 1L;
 	private CarParkView carParkReservedView;
     private int numberOfFloors;
     private int numberOfRows;
@@ -39,9 +40,6 @@ public class SimulatorReservedView extends JFrame{
         cars = new Car[numberOfFloors][numberOfRows][numberOfPlaces];
         
         carParkReservedView = new CarParkView();
-        
-        //setBackground(Color.DARK_GRAY);
-       // getContentPane().setBackground(Color.DARK_GRAY);
         
         Container contentPane = getContentPane();
         contentPane.add(carParkReservedView, BorderLayout.CENTER);
@@ -163,7 +161,8 @@ public class SimulatorReservedView extends JFrame{
     
     private class CarParkView extends JPanel {
         
-        private Dimension size;
+		private static final long serialVersionUID = 1L;
+		private Dimension size;
         private Image carParkImage;    
     
         /**
@@ -231,5 +230,4 @@ public class SimulatorReservedView extends JFrame{
                     10 - 1); // TODO use dynamic size or constants
         }
     }
-
 }

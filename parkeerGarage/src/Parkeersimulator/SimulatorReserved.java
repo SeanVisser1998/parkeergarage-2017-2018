@@ -10,6 +10,10 @@ import java.util.Random;
 
 public class SimulatorReserved implements Runnable{
 	
+	/*
+	 * Simulator voor de gereserveerde auto's.
+	 */
+	
 	private static final String RES = "1"; 
 
     private CarQueue entranceResQueue; 
@@ -27,8 +31,8 @@ public class SimulatorReserved implements Runnable{
     /*
      * Auto's die gereserveerd hebben
      */
-    int weekReservedArrivals = 30; //toegevoegd Sean Visser
-    int weekendReservedArrivals = 5; //Toegevoegd Sean Visser
+    int weekReservedArrivals = 30; 
+    int weekendReservedArrivals = 5; 
 
     int enterSpeed = 3; // number of cars that can enter per minute
     int paymentSpeed = 7; // number of cars that can pay per minute

@@ -19,7 +19,11 @@ import javax.swing.ImageIcon;
 
 public class Main extends JFrame{
 	
+	/*
+	 * Main class. Dit is de standaart class die wordt aangeroepen.
+	 */
 	
+	private static final long serialVersionUID = 1L;
 	private final JLabel lblCityParking = new JLabel("City Parking - Groningen");
 	
 	/*
@@ -30,39 +34,16 @@ public class Main extends JFrame{
 	
 	public static void main(String args[]) {
 		
+		/*
+		 * Deze 'functie' wordt aangeroepen zodra het programma opstart.
+		 */
+		
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
-					
 						Main frame = new Main();
 						frame.setVisible(true);
-
-					
 			}
-			
-		});
-		
-		
-		
-		/*
-		 * Opmerking: dit voert ALLEEN de bovenste uit, ik ben momenteel met een fix hiervoor bezig :)
-		 */	
-		
-		
-		/*
-		 * Sean Visser
-		 * Simulator openen voor gereserveerde plekken
-		 */
-		//SimulatorReserved simRes = new SimulatorReserved();
-		//simRes.runRes();
-		
-		/*
-		 * Sean Visser
-		 * Simulator openen voor NIET gereserveerde plekken
-		 */
-		//Simulator sim = new Simulator();
-		//sim.run();
-		
-	
+		});	
 	}
 	
 	public Main() {
@@ -100,7 +81,17 @@ public class Main extends JFrame{
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
+				//TODO Maak een view aan die de statistiek laat zien voor 'SimulatorReserved'/'SimulatorReservedView'
 				StatisticReservedView STRV = new StatisticReservedView();
+				/*
+				 * Sean Visser
+				 * 15-01-2018
+				 * 
+				 * Code die voor Threading zorgt. Pas uncommenten als de statistiek af is!
+				 * 
+				 * Thread mySTRV = new Thread(STRV);
+				 * mySTRV.start();
+				 */
 			}
 		});
 		btnNewButton.setForeground(Color.WHITE);
@@ -113,6 +104,7 @@ public class Main extends JFrame{
 			public void actionPerformed(ActionEvent arg0) {
 				/*
 				 * Sean Visser
+				 * 15-01-2018
 				 * Simulatie werkend gekregen door er een thread van te maken :) 
 				 */
 				Simulator runSim = new Simulator();
@@ -131,7 +123,15 @@ public class Main extends JFrame{
 		btnParkeergarageStatistiek.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				
+				//TODO Maak een view aan die de statistiek laat zien voor 'Simulator'/'SimulatorView'
 				StatisticView STV = new StatisticView();
+				/*
+				 * Sean Visser
+				 * 15-01-2018
+				 * Code die voor Threading zorgt. Pas uncommenten als de statistiek af is!
+				 * Thread mySTV = new Thread(STV);
+				 * mySTV.start();
+				 */
 				
 			}
 		});

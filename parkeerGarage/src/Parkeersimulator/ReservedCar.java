@@ -8,6 +8,10 @@ import java.util.Random;
  * 11-01-2018
  */
 public class ReservedCar extends Car{
+	
+	/*
+	 * Class voor gereserveerde auto's.
+	 */
 	private static final Color COLOR=Color.CYAN;
 
 	public ReservedCar() {
@@ -16,7 +20,6 @@ public class ReservedCar extends Car{
         this.setMinutesLeft(stayMinutes);
         this.setHasToPay(false);
         this.setHasToPayFee(true);
-		
 	}
 
 	

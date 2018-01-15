@@ -4,6 +4,10 @@ import java.util.Random;
 import java.awt.*;
 
 public class ParkingPassCar extends Car {
+	
+	/*
+	 * Class voor auto's met een parkeerpas
+	 */
 	private static final Color COLOR=Color.blue;
 	
     public ParkingPassCar() {
