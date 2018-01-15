@@ -3,9 +3,13 @@ package Parkeersimulator;
 import java.util.Random;
 import java.awt.Color;
 import java.awt.Toolkit;
+import javax.swing.JLabel;
+import java.awt.BorderLayout;
+import java.awt.Font;
+import javax.swing.JPanel;
 
 
-public class Simulator{
+public class Simulator implements Runnable{
 
 	private static final String AD_HOC = "1";
 	private static final String PASS = "2";
@@ -57,10 +61,13 @@ public class Simulator{
          * Code blok voor NIET gereserveerde plekken VIEW
          */
         simulatorView = new SimulatorView(3, 6, 30);
-        simulatorView.setIconImage(Toolkit.getDefaultToolkit().getImage(Simulator.class.getResource("/afbeeldingen/Parking-Logo.jpg")));
         simulatorView.setResizable(false);
+        simulatorView.setIconImage(Toolkit.getDefaultToolkit().getImage(Simulator.class.getResource("/afbeeldingen/Parking-Logo.jpg")));
         simulatorView.setBackground(Color.DARK_GRAY);
         simulatorView.getContentPane().setBackground(Color.DARK_GRAY);
+        
+        JPanel panel = new JPanel();
+        simulatorView.getContentPane().add(panel, BorderLayout.NORTH);
 
         //Einde
         

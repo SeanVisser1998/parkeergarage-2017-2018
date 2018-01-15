@@ -111,8 +111,14 @@ public class Main extends JFrame{
 		JButton btnOpenParkeergarage = new JButton("Open parkeergarage");
 		btnOpenParkeergarage.addActionListener(new ActionListener() {			
 			public void actionPerformed(ActionEvent arg0) {
+				/*
+				 * Sean Visser
+				 * Simulatie werkend gekregen door er een thread van te maken :) 
+				 */
+				Simulator runSim = new Simulator();
+				Thread mySim = new Thread(runSim);
+				mySim.start();
 				
-				Simulator sim = new Simulator();
 			
 			}
 		});
@@ -137,8 +143,13 @@ public class Main extends JFrame{
 		JButton btnOpenReserveringen = new JButton("Open reserveringen");
 		btnOpenReserveringen.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
-				SimulatorReserved simRes = new SimulatorReserved();
+				/*
+				 * Sean Visser
+				 * Simulatie werkend gekregen door er een thread van te maken :) 
+				 */
+				SimulatorReserved runSimRes = new SimulatorReserved();
+				Thread myRunSimRes = new Thread(runSimRes);
+				myRunSimRes.start();
 				
 			}
 		});

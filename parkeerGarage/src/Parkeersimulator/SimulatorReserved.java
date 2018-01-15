@@ -8,7 +8,7 @@ import java.awt.Color;
 import java.awt.Toolkit;
 import java.util.Random;
 
-public class SimulatorReserved {
+public class SimulatorReserved implements Runnable{
 	
 	private static final String RES = "1"; 
 

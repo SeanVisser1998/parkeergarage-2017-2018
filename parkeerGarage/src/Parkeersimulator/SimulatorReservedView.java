@@ -40,6 +40,9 @@ public class SimulatorReservedView extends JFrame{
         
         carParkReservedView = new CarParkView();
         
+        //setBackground(Color.DARK_GRAY);
+       // getContentPane().setBackground(Color.DARK_GRAY);
+        
         Container contentPane = getContentPane();
         contentPane.add(carParkReservedView, BorderLayout.CENTER);
         pack();
