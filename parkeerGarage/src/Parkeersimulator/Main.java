@@ -16,7 +16,10 @@ import java.awt.SystemColor;
 import java.awt.Label;
 import javax.swing.ImageIcon;
 
+
 public class Main extends JFrame{
+	
+	
 	private final JLabel lblCityParking = new JLabel("City Parking - Groningen");
 	
 	/*
@@ -101,10 +104,10 @@ public class Main extends JFrame{
 		getContentPane().add(btnNewButton);
 		
 		JButton btnOpenParkeergarage = new JButton("Open parkeergarage");
-		btnOpenParkeergarage.addActionListener(new ActionListener() {
+		btnOpenParkeergarage.addActionListener(new ActionListener() {			
 			public void actionPerformed(ActionEvent arg0) {
+				
 				Simulator sim = new Simulator();
-				sim.run();
 			}
 		});
 		btnOpenParkeergarage.setForeground(Color.WHITE);
@@ -113,6 +116,13 @@ public class Main extends JFrame{
 		getContentPane().add(btnOpenParkeergarage);
 		
 		JButton btnParkeergarageStatistiek = new JButton("Parkeergarage statistiek");
+		btnParkeergarageStatistiek.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
+				StatisticView STV = new StatisticView();
+				
+			}
+		});
 		btnParkeergarageStatistiek.setForeground(Color.WHITE);
 		btnParkeergarageStatistiek.setBackground(SystemColor.textHighlight);
 		btnParkeergarageStatistiek.setBounds(380, 166, 334, 64);
@@ -121,8 +131,9 @@ public class Main extends JFrame{
 		JButton btnOpenReserveringen = new JButton("Open reserveringen");
 		btnOpenReserveringen.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
 				SimulatorReserved simRes = new SimulatorReserved();
-				simRes.run();
+				
 			}
 		});
 		btnOpenReserveringen.setForeground(Color.WHITE);

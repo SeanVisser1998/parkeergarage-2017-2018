@@ -5,7 +5,7 @@ import java.awt.Color;
 import java.awt.Toolkit;
 
 
-public class Simulator {
+public class Simulator extends Main{
 
 	private static final String AD_HOC = "1";
 	private static final String PASS = "2";
@@ -59,22 +59,7 @@ public class Simulator {
         simulatorView.setResizable(false);
         simulatorView.setBackground(Color.DARK_GRAY);
         simulatorView.getContentPane().setBackground(Color.DARK_GRAY);
-        //Einde
-        
-        /*
-         * Sean Visser
-         * 12-01-2018
-         * Code blok voor WEL gereserveerde plekken (toegevoegd)
-         */
-        
-        /*
-        simulatorReservedView = new SimulatorReservedView(1, 6, 30);
-        simulatorReservedView.setIconImage(Toolkit.getDefaultToolkit().getImage(Simulator.class.getResource("/javax/swing/plaf/metal/icons/ocean/homeFolder.gif")));
-        simulatorReservedView.setResizable(false);
-        simulatorReservedView.setBackground(Color.DARK_GRAY);
-        simulatorReservedView.getContentPane().setBackground(Color.DARK_GRAY);
-        */
-        
+
         //Einde
         
         
