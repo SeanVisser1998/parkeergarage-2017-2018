@@ -17,7 +17,7 @@ public class SimulatorView extends JFrame {
 
     public SimulatorView(int numberOfFloors, int numberOfRows, int numberOfPlaces) {
     	
-    	super("City Parking - Groningen");//Voegt titel toe aan het programma :)
+    	super("Parkeergarage - Groningen");//Voegt titel toe aan het programma :)
     	
         this.numberOfFloors = numberOfFloors;
         this.numberOfRows = numberOfRows;

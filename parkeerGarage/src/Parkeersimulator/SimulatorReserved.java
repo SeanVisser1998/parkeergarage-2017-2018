@@ -43,10 +43,10 @@ public class SimulatorReserved {
         /*
          * Sean Visser
          * 12-01-2018
-         * Code blok voor WEL gereserveerde plekken (toegevoegd)
+         * Code blok voor WEL gereserveerde plekken (toegevoegd) VIEW
          */
         simulatorReservedView = new SimulatorReservedView(1, 6, 30);
-        simulatorReservedView.setIconImage(Toolkit.getDefaultToolkit().getImage(Simulator.class.getResource("/javax/swing/plaf/metal/icons/ocean/homeFolder.gif")));
+        simulatorReservedView.setIconImage(Toolkit.getDefaultToolkit().getImage(Simulator.class.getResource("/afbeeldingen/Parking-Logo.jpg")));
         simulatorReservedView.setResizable(false);
         simulatorReservedView.setBackground(Color.DARK_GRAY);
         simulatorReservedView.getContentPane().setBackground(Color.DARK_GRAY);

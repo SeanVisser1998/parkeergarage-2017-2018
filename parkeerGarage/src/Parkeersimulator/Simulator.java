@@ -5,7 +5,7 @@ import java.awt.Color;
 import java.awt.Toolkit;
 
 
-public class Simulator extends Main{
+public class Simulator{
 
 	private static final String AD_HOC = "1";
 	private static final String PASS = "2";
@@ -51,11 +51,13 @@ public class Simulator extends Main{
         entranceResQueue = new CarQueue(); //toegevoegd Sean Visser
         paymentCarQueue = new CarQueue();
         exitCarQueue = new CarQueue();
+        
+        
         /*
-         * Code blok voor NIET gereserveerde plekken 
+         * Code blok voor NIET gereserveerde plekken VIEW
          */
         simulatorView = new SimulatorView(3, 6, 30);
-        simulatorView.setIconImage(Toolkit.getDefaultToolkit().getImage(Simulator.class.getResource("/javax/swing/plaf/metal/icons/ocean/homeFolder.gif")));
+        simulatorView.setIconImage(Toolkit.getDefaultToolkit().getImage(Simulator.class.getResource("/afbeeldingen/Parking-Logo.jpg")));
         simulatorView.setResizable(false);
         simulatorView.setBackground(Color.DARK_GRAY);
         simulatorView.getContentPane().setBackground(Color.DARK_GRAY);

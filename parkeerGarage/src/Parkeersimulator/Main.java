@@ -32,17 +32,16 @@ public class Main extends JFrame{
 		
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
-					try {
+					
 						Main frame = new Main();
 						frame.setVisible(true);
-						
-					}catch(Exception e) {
-						e.printStackTrace();
-					}
+
 					
 			}
 			
 		});
+		
+		
 		
 		/*
 		 * Opmerking: dit voert ALLEEN de bovenste uit, ik ben momenteel met een fix hiervoor bezig :)
@@ -98,6 +97,12 @@ public class Main extends JFrame{
 		panel.add(label);
 		
 		JButton btnNewButton = new JButton("Reserveringen statistiek");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				StatisticReservedView STRV = new StatisticReservedView();
+			}
+		});
 		btnNewButton.setForeground(Color.WHITE);
 		btnNewButton.setBackground(SystemColor.textHighlight);
 		btnNewButton.setBounds(380, 316, 334, 64);
@@ -108,6 +113,7 @@ public class Main extends JFrame{
 			public void actionPerformed(ActionEvent arg0) {
 				
 				Simulator sim = new Simulator();
+			
 			}
 		});
 		btnOpenParkeergarage.setForeground(Color.WHITE);

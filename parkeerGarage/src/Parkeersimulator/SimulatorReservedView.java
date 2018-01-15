@@ -29,7 +29,7 @@ public class SimulatorReservedView extends JFrame{
     
     public SimulatorReservedView(int numberOfFloors, int numberOfRows, int numberOfPlaces) {
     	
-    	super("City Parking - Groningen");//Voegt titel toe aan het programma :)
+    	super("Reserveringen - Groningen");//Voegt titel toe aan het programma :)
     	
     	this.numberOfFloors = numberOfFloors;
         this.numberOfRows = numberOfRows;
