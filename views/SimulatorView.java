@@ -1,6 +1,10 @@
-package Parkeersimulator;
+package views;
 
 import javax.swing.*;
+
+import models.Car;
+import models.Location;
+
 import java.awt.*;
 
 public class SimulatorView extends JFrame {

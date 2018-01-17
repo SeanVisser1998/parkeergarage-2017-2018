@@ -1,6 +1,8 @@
-package Parkeersimulator;
+package models;
 
 import java.util.Random;
+
+import views.SimulatorView;
 
 public class Simulator {
 
