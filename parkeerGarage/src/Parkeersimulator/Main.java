@@ -72,7 +72,7 @@ public class Main extends JFrame{
 		lblDfdf.setForeground(Color.WHITE);
 		panel.add(lblDfdf);
 		
-		Label label = new Label("Daan Aalders, Pyter van der Leij, Rutger Rozendal, Bram ... & Sean Visser");
+		Label label = new Label("Daan Aalders, Pyter van der Leij, Rutger Rozendal, Bram Rustenhoven & Sean Visser");
 		label.setForeground(Color.WHITE);
 		label.setFont(new Font("Tahoma", Font.PLAIN, 9));
 		panel.add(label);
