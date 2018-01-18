@@ -1,54 +1,56 @@
 package controller;
 
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.JButton;
-import javax.swing.JPanel;
 
-import main.Main;
-import model.CarPark;
+import logic.Model;
 
 @SuppressWarnings("serial")
-public class Controller extends JPanel implements ActionListener{
-	
-	private CarPark carPark;
-	private JButton start;
-	private JButton stop;
+public class Controller extends AbstractController implements ActionListener{
 
-	public Controller(CarPark carPark) {
-		
-		this.carPark = carPark;
-		
-		start=new JButton("Start");
-		start.addActionListener(this);
-		stop = new JButton("Stop");
-		stop.addActionListener(this);
-		
-		setSize(450,50);
-		
-		this.setLayout(null);
-		add(start);
-		add(stop);
-		start.setBounds(229, 10, 70, 30);
-		stop.setBounds(319, 10, 70, 30);
-		
-		setVisible(true);
+	JButton startButton;
+	JButton stopButton;
+	JButton resetButton;
+	
+	public Controller(Model model) {
+		super(model);
+		startButton = new JButton("Start");
+		stopButton = new JButton("Stop");
+		resetButton = new JButton("Reset");
+		setUpPanel();
 	}
 	
-	private void startPressed() {
-		Main.running = true;
+	private void setUpPanel(){
+		setLayout(new FlowLayout());
+		startButton.addActionListener(this);
+		stopButton.addActionListener(this);
+		resetButton.addActionListener(this);
 		
+		add(startButton);
+		add(stopButton);
+		add(resetButton);
 	}
-	
+
 	@Override
-	public void actionPerformed(ActionEvent actionEvent) {
-		 if(actionEvent.getSource() == start){
-			 this.startPressed();
-		 }
-	            
-	}
+	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() == startButton) {
+			
+			if(Model.run) {
+				
+			}else {
+				model.start();
+			}
+		
+		}
+		
+		else if (e.getSource() == stopButton) {
+			model.stop();
+		}
+		else if (e.getSource() == resetButton) {
+			model.reset(); //Deze mag jij maken, Rutger xD
+		}
 		
 	}
-
-
+}

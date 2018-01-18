@@ -1,4 +1,4 @@
-package model;
+package logic;
 
 import java.awt.*;
 
@@ -9,9 +9,6 @@ public abstract class Car {
     private boolean isPaying;
     private boolean hasToPay;
 
-    /**
-     * Constructor for objects of class Car
-     */
     public Car() {
 
     }

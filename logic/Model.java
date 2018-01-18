@@ -1,22 +1,13 @@
-package model;
+package logic;
 
-import java.util.*;
+import java.awt.Color;
 import java.util.Random;
 
-import view.CarParkView;
-import view.View;
-
-public class CarPark implements Runnable{
+public class Model extends AbstractModel implements Runnable{
 	
-	private List<View> views;
+	public static boolean run;
 	
-    private static int numberOfFloors;
-    private static int numberOfRows;
-    private static int numberOfPlaces;
-    private static int numberOfOpenSpots;
-    private static Car[][][] cars;
-    
-    private static final String AD_HOC = "1";
+	private static final String AD_HOC = "1";
 	private static final String PASS = "2";
 	
 	
@@ -24,13 +15,20 @@ public class CarPark implements Runnable{
     private CarQueue entrancePassQueue;
     private CarQueue paymentCarQueue;
     private CarQueue exitCarQueue;
-
+    
+    private Car[][][] cars;
+    
 
     private int day = 0;
     private int hour = 0;
     private int minute = 0;
 
     private int tickPause = 100;
+    
+    int numberOfFloors;
+    int numberOfRows;
+    int numberOfPlaces;
+    int numberOfOpenSpots;
 
     int weekDayArrivals= 100; // average number of arriving cars per hour
     int weekendArrivals = 200; // average number of arriving cars per hour
@@ -40,46 +38,66 @@ public class CarPark implements Runnable{
     int enterSpeed = 3; // number of cars that can enter per minute
     int paymentSpeed = 7; // number of cars that can pay per minute
     int exitSpeed = 5; // number of cars that can leave per minute
+	
+	public Model(int numberOfFloors, int numberOfRows, int numberOfPlaces) {
+		run = false;
+		entranceCarQueue = new CarQueue();
+        entrancePassQueue = new CarQueue();
+        paymentCarQueue = new CarQueue();
+        exitCarQueue = new CarQueue();
+        this.numberOfFloors = numberOfFloors;
+        this.numberOfRows = numberOfRows;
+        this.numberOfPlaces = numberOfPlaces;
+        this.numberOfOpenSpots = numberOfFloors * numberOfRows * numberOfPlaces;
+        cars = new Car[numberOfFloors][numberOfRows][numberOfPlaces];
+        
+	}
+	
+	public void run() {
+		run = true;
+		while(run) {
+			tick();
+			try {
+				Thread.sleep(tickPause);
+			} catch (Exception e) {} 
+		}
+		
+	}
+	
+	public void start() {
+		new Thread(this).start();
+	}
+	
+	public void stop() {
+		run = false;
+	}
+	
+	public void reset() {
+		
+		
+	}
+	
+	public int getNumberOfFloors() {
+        return numberOfFloors;
+    }
 
-    
-    public CarPark(int Floors, int Rows, int Places) {
-    	
-    	   numberOfFloors = Floors;
-    	   numberOfRows = Rows;
-           numberOfPlaces = Places;
-           numberOfOpenSpots =Floors*Rows*Places;
-           cars = new Car[numberOfFloors][numberOfRows][numberOfPlaces];
-           
-           views = new ArrayList<View>();
-           
-           notifyViews();
-    	
-    }
-    
-    public void addView(View view) {
-    	views.add(view);
-    }
-    
-    public void notifyViews() {
-    	for(View v : views) v.updateView();
+    public int getNumberOfRows() {
+        return numberOfRows;
     }
 
-    public void run() {
-        for (int i = 0; i < 10000; i++) {
-            tick2();
-        }
+    public int getNumberOfPlaces() {
+        return numberOfPlaces;
     }
 
-    private void tick2() {
+    public int getNumberOfOpenSpots(){
+    	return numberOfOpenSpots;
+    }
+    
+    private void tick() {
+    	oldTick();
     	advanceTime();
     	handleExit();
     	notifyViews();
-    	// Pause.
-        try {
-            Thread.sleep(tickPause);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     	handleEntrance();
     }
 
@@ -123,18 +141,18 @@ public class CarPark implements Runnable{
         int i=0;
         // Remove car from the front of the queue and assign to a parking space.
     	while (queue.carsInQueue()>0 && 
-    			CarPark.getNumberOfOpenSpots()>0 && 
+    			getNumberOfOpenSpots()>0 && 
     			i<enterSpeed) {
             Car car = queue.removeCar();
-            Location freeLocation = CarPark.getFirstFreeLocation();
-            CarPark.setCarAt(freeLocation, car);
+            Location freeLocation = getFirstFreeLocation();
+            setCarAt(freeLocation, car);
             i++;
         }
     }
     
     private void carsReadyToLeave(){
         // Add leaving cars to the payment queue.
-        Car car = CarPark.getFirstLeavingCar();
+        Car car = getFirstLeavingCar();
         while (car!=null) {
         	if (car.getHasToPay()){
 	            car.setIsPaying(true);
@@ -143,7 +161,7 @@ public class CarPark implements Runnable{
         	else {
         		carLeavesSpot(car);
         	}
-            car = CarPark.getFirstLeavingCar();
+            car = getFirstLeavingCar();
         }
     }
 
@@ -198,34 +216,18 @@ public class CarPark implements Runnable{
     }
     
     private void carLeavesSpot(Car car){
-    	CarPark.removeCarAt(car.getLocation());
+    	removeCarAt(car.getLocation());
         exitCarQueue.addCar(car);
     }
-	
-	public static int getNumberOfFloors() {
-        return numberOfFloors;
-    }
-
-    public static int getNumberOfRows() {
-        return numberOfRows;
-    }
-
-    public static int getNumberOfPlaces() {
-        return numberOfPlaces;
-    }
-
-    public static int getNumberOfOpenSpots(){
-    	return numberOfOpenSpots;
-    }
     
-    public static Car getCarAt(Location location) {
+    public Car getCarAt(Location location) {
         if (!locationIsValid(location)) {
             return null;
         }
         return cars[location.getFloor()][location.getRow()][location.getPlace()];
     }
 
-    public static boolean setCarAt(Location location, Car car) {
+    public boolean setCarAt(Location location, Car car) {
         if (!locationIsValid(location)) {
             return false;
         }
@@ -239,7 +241,7 @@ public class CarPark implements Runnable{
         return false;
     }
 
-    public static Car removeCarAt(Location location) {
+    public Car removeCarAt(Location location) {
         if (!locationIsValid(location)) {
             return null;
         }
@@ -253,7 +255,7 @@ public class CarPark implements Runnable{
         return car;
     }
 
-    public static Location getFirstFreeLocation() {
+    public Location getFirstFreeLocation() {
         for (int floor = 0; floor < getNumberOfFloors(); floor++) {
             for (int row = 0; row < getNumberOfRows(); row++) {
                 for (int place = 0; place < getNumberOfPlaces(); place++) {
@@ -267,7 +269,7 @@ public class CarPark implements Runnable{
         return null;
     }
 
-    public static Car getFirstLeavingCar() {
+    public Car getFirstLeavingCar() {
         for (int floor = 0; floor < getNumberOfFloors(); floor++) {
             for (int row = 0; row < getNumberOfRows(); row++) {
                 for (int place = 0; place < getNumberOfPlaces(); place++) {
@@ -282,21 +284,21 @@ public class CarPark implements Runnable{
         return null;
     }
 
-    public void tick() {
-        for (int floor = 0; floor < getNumberOfFloors(); floor++) {
-            for (int row = 0; row < getNumberOfRows(); row++) {
-                for (int place = 0; place < getNumberOfPlaces(); place++) {
-                    Location location = new Location(floor, row, place);
-                    Car car = getCarAt(location);
-                    if (car != null) {
-                        car.tick();
-                    }
-                }
-            }
-        }
-    }
+    public void oldTick() {
+    	for (int floor = 0; floor < getNumberOfFloors(); floor++) {
+    		for (int row = 0; row < getNumberOfRows(); row++) {
+    			for (int place = 0; place < getNumberOfPlaces(); place++) {
+    				Location location = new Location(floor, row, place);
+    				Car car = getCarAt(location);
+    				if (car != null) {
+    					car.tick();
+					}
+				}           
+    		}
+		}
+ 	}
 
-    private static boolean locationIsValid(Location location) {
+    private boolean locationIsValid(Location location) {
         int floor = location.getFloor();
         int row = location.getRow();
         int place = location.getPlace();
@@ -305,5 +307,4 @@ public class CarPark implements Runnable{
         }
         return true;
     }
-
 }
