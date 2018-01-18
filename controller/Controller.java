@@ -13,12 +13,14 @@ public class Controller extends AbstractController implements ActionListener{
 	JButton startButton;
 	JButton stopButton;
 	JButton resetButton;
+	JButton closeButton;
 	
 	public Controller(Model model) {
 		super(model);
 		startButton = new JButton("Start");
 		stopButton = new JButton("Stop");
 		resetButton = new JButton("Reset");
+		closeButton = new JButton("Close");
 		setUpPanel();
 	}
 	
@@ -27,17 +29,19 @@ public class Controller extends AbstractController implements ActionListener{
 		startButton.addActionListener(this);
 		stopButton.addActionListener(this);
 		resetButton.addActionListener(this);
+		closeButton.addActionListener(this);
 		
 		add(startButton);
 		add(stopButton);
 		add(resetButton);
+		add(closeButton);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == startButton) {
 			
-			if(Model.run) {
+			if(model.run) {
 				
 			}else {
 				model.start();
@@ -50,6 +54,9 @@ public class Controller extends AbstractController implements ActionListener{
 		}
 		else if (e.getSource() == resetButton) {
 			model.reset(); //Deze mag jij maken, Rutger xD
+		}
+		else if (e.getSource() == closeButton)	{
+			model.close(); //sluit het scherm xx Daan
 		}
 		
 	}

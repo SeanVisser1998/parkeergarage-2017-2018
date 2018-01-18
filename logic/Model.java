@@ -3,6 +3,8 @@ package logic;
 import java.awt.Color;
 import java.util.Random;
 
+import javax.swing.JOptionPane;
+
 public class Model extends AbstractModel implements Runnable{
 	
 	public static boolean run;
@@ -75,6 +77,18 @@ public class Model extends AbstractModel implements Runnable{
 	public void reset() {
 		
 		
+	}
+	
+	public void close() {
+		int option = JOptionPane.showConfirmDialog( 
+								
+                null, "Are you sure you want to close the application?",
+                "Close Confirmation", 
+                JOptionPane.YES_NO_OPTION, 
+                JOptionPane.QUESTION_MESSAGE);
+        if (option == JOptionPane.YES_OPTION) {
+                System.exit(0);
+        }
 	}
 	
 	public int getNumberOfFloors() {
