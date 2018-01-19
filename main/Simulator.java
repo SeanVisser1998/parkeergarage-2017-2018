@@ -19,12 +19,11 @@ public class Simulator extends JFrame{
 	private Controller controller;
 	
 	public Simulator() {
-		super("City Park - Groningenr");
+		super("City Park - Groningen");
 		model = new Model(3, 6, 30);
 		controller = new Controller(model);
 		carParkView = new CarParkView(model);
 		setUpFrame();
-
 	}
 	
 	public void setUpFrame() {

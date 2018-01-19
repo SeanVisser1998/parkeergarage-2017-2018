@@ -2,8 +2,8 @@ package logic;
 
 import java.awt.Color;
 import java.util.Random;
-
 import javax.swing.JOptionPane;
+
 
 public class Model extends AbstractModel implements Runnable{
 	
@@ -11,7 +11,6 @@ public class Model extends AbstractModel implements Runnable{
 	
 	private static final String AD_HOC = "1";
 	private static final String PASS = "2";
-	
 	
 	private CarQueue entranceCarQueue;
     private CarQueue entrancePassQueue;
@@ -67,7 +66,10 @@ public class Model extends AbstractModel implements Runnable{
 	}
 	
 	public void start() {
-		new Thread(this).start();
+		if(!run) {
+			run = true;
+			new Thread(this).start();
+		}
 	}
 	
 	public void stop() {
@@ -75,8 +77,26 @@ public class Model extends AbstractModel implements Runnable{
 	}
 	
 	public void reset() {
+		/*
+		 * Deze methode moet door de array cars lopen en checken of er een car in de array zit en als die er inzit dan moet je die verwijdert worden.
+		 */
 		
-		
+		for(int f = 0; f < numberOfFloors; f++) //aantal floors
+		{
+			for(int r = 0; r < numberOfRows; r++) //aantal rows
+			{
+				for(int p = 0; p < cars[f][r].length; p++)  //aantal plaatsen
+				{
+					if(cars[f][r][p] != null)					//checkt of de plaats leeg is of niet
+					removeCarAt(cars[f][r][p].getLocation());	//verwijdert de auto
+				}
+			}
+		}
+		run = false;
+		tick();
+		day = 0;
+		hour = 0;
+		minute = 0;
 	}
 	
 	public void plusOne() {
@@ -143,7 +163,7 @@ public class Model extends AbstractModel implements Runnable{
     private void handleEntrance(){
     	carsArriving();
     	carsEntering(entrancePassQueue);
-    	carsEntering(entranceCarQueue);  	
+    	carsEntering(entranceCarQueue);  
     }
     
     private void handleExit(){
@@ -237,9 +257,10 @@ public class Model extends AbstractModel implements Runnable{
     	}
     }
     
+    
     private void carLeavesSpot(Car car){
-    	removeCarAt(car.getLocation());
-        exitCarQueue.addCar(car);
+		removeCarAt(car.getLocation());
+		exitCarQueue.addCar(car);
     }
     
     public Car getCarAt(Location location) {
