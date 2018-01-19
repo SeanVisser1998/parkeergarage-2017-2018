@@ -79,6 +79,14 @@ public class Model extends AbstractModel implements Runnable{
 		
 	}
 	
+	public void plusOne() {
+		tick();
+	}
+	
+//	public void minusOne() {
+//		
+//	}
+	
 	public void close() {
 		int option = JOptionPane.showConfirmDialog( 
 								
