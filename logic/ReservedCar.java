@@ -7,8 +7,8 @@ public class ReservedCar extends Car {
 	//Kleur bepalen
 	private static final Color COLOR=Color.yellow;
 	
-	//gereserveerde locatie (werkt nog niet)
-	//private Location reservedLocation;
+	//gereserveerde locatie
+	private Location reservedLocation;
 	
 	//Constructor
 	public ReservedCar(){
@@ -16,10 +16,16 @@ public class ReservedCar extends Car {
 		int stayMinutes = (int) (15 + random.nextFloat() * 3 * 60);
 		this.setMinutesLeft(stayMinutes);
 		this.setHasToPay(true);
+//		this.reservedLocation = location;
 	};
 	
 	//Return color functie
 	public Color getColor() {
 		return COLOR;
+	}
+	
+	//return gereserveerde locatie van deze auto
+	public Location getReservedSpot() {
+		return this.reservedLocation;
 	}
 }
