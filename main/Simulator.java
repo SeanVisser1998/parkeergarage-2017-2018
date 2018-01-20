@@ -9,7 +9,7 @@ import controller.Controller;
 import logic.Model;
 import view.AbstractView;
 import view.CarParkView;
-
+import logic.Model;
 
 @SuppressWarnings("serial")
 public class Simulator extends JFrame{
@@ -19,11 +19,12 @@ public class Simulator extends JFrame{
 	private Controller controller;
 	
 	public Simulator() {
-		super("City Park - Groningen");
-		model = new Model(3, 6, 30);
+		super("City Park - Groningenr");
+		model = new Model(3, 6, 30, 60);
 		controller = new Controller(model);
 		carParkView = new CarParkView(model);
 		setUpFrame();
+
 	}
 	
 	public void setUpFrame() {

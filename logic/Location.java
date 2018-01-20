@@ -5,12 +5,12 @@ public class Location {
     private int floor;
     private int row;
     private int place;
-
     public Location(int floor, int row, int place) {
         this.floor = floor;
         this.row = row;
         this.place = place;
     }
+    static int[] passRow = {0,1,2,3};
 
     public boolean equals(Object obj) {
         if(obj instanceof Location) {
