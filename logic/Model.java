@@ -2,6 +2,8 @@ package logic;
 
 import java.awt.Color;
 import java.util.Random;
+import javax.swing.JOptionPane;
+
 
 public class Model extends AbstractModel implements Runnable{
 	
@@ -9,7 +11,6 @@ public class Model extends AbstractModel implements Runnable{
 	
 	private static final String AD_HOC = "1";
 	private static final String PASS = "2";
-	
 	
 	private CarQueue entranceCarQueue;
     private CarQueue entrancePassQueue;
@@ -28,7 +29,6 @@ public class Model extends AbstractModel implements Runnable{
     int numberOfFloors;
     int numberOfRows;
     int numberOfPlaces;
-    int numberOfPassPlaces;
     int numberOfOpenSpots;
 
     int weekDayArrivals= 100; // average number of arriving cars per hour
@@ -40,61 +40,20 @@ public class Model extends AbstractModel implements Runnable{
     int paymentSpeed = 7; // number of cars that can pay per minute
     int exitSpeed = 5; // number of cars that can leave per minute
 	
-	public Model (int numberOfFloors, int numberOfRows, int numberOfPlaces, int numberOfPassPlaces) {
+	public Model(int numberOfFloors, int numberOfRows, int numberOfPlaces) {
 		run = false;
 		entranceCarQueue = new CarQueue();
         entrancePassQueue = new CarQueue();
         paymentCarQueue = new CarQueue();
         exitCarQueue = new CarQueue();
         this.numberOfFloors = numberOfFloors;
-        this.numberOfPassPlaces = numberOfPassPlaces;
         this.numberOfRows = numberOfRows;
         this.numberOfPlaces = numberOfPlaces;
         this.numberOfOpenSpots = numberOfFloors * numberOfRows * numberOfPlaces;
         cars = new Car[numberOfFloors][numberOfRows][numberOfPlaces];
-        makePassPlaces(this.numberOfPassPlaces);
-       }	
-	public void makePassPlaces(int numberOfPassPlaces) {
-
-
-            int x = 0,
-                z = 0,
-                y = 0;
-
-            for (int i=0; i<this.numberOfPassPlaces; i++) {
-                if (z == numberOfPlaces) {
-                    if (x == numberOfRows - 1) {
-                        y++;
-                        x = 0;
-                        z = 0;
-                    }
-                    else {
-                        x += 1;
-                        z = 0;
-                    }
-                }
-                setPassPlace(new Location(y, x, z), new PassPlace());
-                z++;
-            }
-        }
-       
-	 public boolean setPassPlace(Location loc, PassPlace phs) {
-	        if (!locationIsValid(loc))
-	            return false;
-
-	        Car oldCar = getCarAt(loc);
-	        if(oldCar == null) {
-	            cars[2][2][loc.getPlace()] = phs;
-	            cars[2][3][loc.getPlace()] = phs;
-	            cars[2][1][loc.getPlace()] = phs;
-	            cars[2][0][loc.getPlace()] = phs;
-	            phs.setLocation(loc);
-	            return true;
-	        }
-
-	        return false;
-	    }
-
+        
+	}
+	
 	public void run() {
 		run = true;
 		while(run) {
@@ -107,7 +66,10 @@ public class Model extends AbstractModel implements Runnable{
 	}
 	
 	public void start() {
-		new Thread(this).start();
+		if(!run) {
+			run = true;
+			new Thread(this).start();
+		}
 	}
 	
 	public void stop() {
@@ -115,8 +77,46 @@ public class Model extends AbstractModel implements Runnable{
 	}
 	
 	public void reset() {
+		/*
+		 * Deze methode moet door de array cars lopen en checken of er een car in de array zit en als die er inzit dan moet je die verwijdert worden.
+		 */
 		
-		
+		for(int f = 0; f < numberOfFloors; f++) //aantal floors
+		{
+			for(int r = 0; r < numberOfRows; r++) //aantal rows
+			{
+				for(int p = 0; p < cars[f][r].length; p++)  //aantal plaatsen
+				{
+					if(cars[f][r][p] != null)					//checkt of de plaats leeg is of niet
+					removeCarAt(cars[f][r][p].getLocation());	//verwijdert de auto
+				}
+			}
+		}
+		run = false;
+		tick();
+		day = 0;
+		hour = 0;
+		minute = 0;
+	}
+	
+	public void plusOne() {
+		tick();
+	}
+	
+//	public void minusOne() {
+//		
+//	}
+	
+	public void close() {
+		int option = JOptionPane.showConfirmDialog( 
+								
+                null, "Are you sure you want to close the application?",
+                "Close Confirmation", 
+                JOptionPane.YES_NO_OPTION, 
+                JOptionPane.QUESTION_MESSAGE);
+        if (option == JOptionPane.YES_OPTION) {
+                System.exit(0);
+        }
 	}
 	
 	public int getNumberOfFloors() {
@@ -163,7 +163,7 @@ public class Model extends AbstractModel implements Runnable{
     private void handleEntrance(){
     	carsArriving();
     	carsEntering(entrancePassQueue);
-    	carsEntering(entranceCarQueue);  	
+    	carsEntering(entranceCarQueue);  
     }
     
     private void handleExit(){
@@ -186,15 +186,9 @@ public class Model extends AbstractModel implements Runnable{
     			getNumberOfOpenSpots()>0 && 
     			i<enterSpeed) {
             Car car = queue.removeCar();
-            if(queue == entrancePassQueue){
-            	Location freePassLocation = getFirstFreePassLocation();
-            	setCarAt(freePassLocation, car);
-            	i++;
-            }else{
             Location freeLocation = getFirstFreeLocation();
             setCarAt(freeLocation, car);
             i++;
-            }
         }
     }
     
@@ -208,7 +202,6 @@ public class Model extends AbstractModel implements Runnable{
         	}
         	else {
         		carLeavesSpot(car);
-        		remakeFreePassLocation();
         	}
             car = getFirstLeavingCar();
         }
@@ -264,9 +257,10 @@ public class Model extends AbstractModel implements Runnable{
     	}
     }
     
+    
     private void carLeavesSpot(Car car){
-    	removeCarAt(car.getLocation());
-        exitCarQueue.addCar(car);
+		removeCarAt(car.getLocation());
+		exitCarQueue.addCar(car);
     }
     
     public Car getCarAt(Location location) {
@@ -317,38 +311,7 @@ public class Model extends AbstractModel implements Runnable{
         }
         return null;
     }
-    public Location getFirstFreePassLocation() {
-        for (int floor = 2; floor < getNumberOfFloors(); floor++) {
-            for (int row = 0; row < getNumberOfRows() && row <4; row++) {
-                for (int place = 0; place < getNumberOfPlaces(); place++) {
-                    Location location = new Location(floor, row, place);
-                    if (getCarAt(location) != null) {
-                        if(getCarAt(location).getColor() == PassPlace.COLOR){
-                        	removeCarAt(location);
-                        	return location;
-                        }
-                    }
-                }
-            }
-        }
-        return null;
-    }
-    public Location remakeFreePassLocation() {
-        for (int floor = 2; floor < getNumberOfFloors(); floor++) {
-            for (int row = 0; row < getNumberOfRows() && row <4; row++) {
-                for (int place = 0; place < getNumberOfPlaces(); place++) {
-                    Location location = new Location(floor, row, place);
-                	setPassPlace(location,new PassPlace());
-                    if (getCarAt(location) == null) {
-                    	Car car = getCarAt(location);
-         	            car.setLocation(location);
-                        }
-                    }
-                }
-            }
-        
-        return null;
-    }
+
     public Car getFirstLeavingCar() {
         for (int floor = 0; floor < getNumberOfFloors(); floor++) {
             for (int row = 0; row < getNumberOfRows(); row++) {
@@ -356,12 +319,11 @@ public class Model extends AbstractModel implements Runnable{
                     Location location = new Location(floor, row, place);
                     Car car = getCarAt(location);
                     if (car != null && car.getMinutesLeft() <= 0 && !car.getIsPaying()) {
-                        	return car;
-                        }
+                        return car;
                     }
                 }
             }
-        
+        }
         return null;
     }
 
