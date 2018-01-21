@@ -3,11 +3,15 @@ package logic;
 import java.awt.Color;
 import java.util.Random;
 import javax.swing.JOptionPane;
-
+import javax.swing.JLabel;
+import java.text.DateFormatSymbols;
+import java.util.Calendar;
 
 public class Model extends AbstractModel implements Runnable{
 	
 	public static boolean run;
+	
+	public JLabel timeText;
 	
 	private static final String AD_HOC = "1";
 	private static final String PASS = "2";
@@ -19,11 +23,12 @@ public class Model extends AbstractModel implements Runnable{
     
     private Car[][][] cars;
     
-
+    String dayString;
+    
     private int day = 0;
     private int hour = 0;
     private int minute = 0;
-
+    private int timeScale = 100;
     private int tickPause = 100;
     
     int numberOfFloors;
@@ -51,6 +56,18 @@ public class Model extends AbstractModel implements Runnable{
         this.numberOfPlaces = numberOfPlaces;
         this.numberOfOpenSpots = numberOfFloors * numberOfRows * numberOfPlaces;
         cars = new Car[numberOfFloors][numberOfRows][numberOfPlaces];
+        
+        
+     // Create a calendar with year and day of year.
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.DAY_OF_YEAR, 180);
+        
+        // Get the weekday
+        day = calendar.get(Calendar.DAY_OF_WEEK);
+
+        // Get weekday name
+        DateFormatSymbols dfs = new DateFormatSymbols();
+        dayString =  dfs.getWeekdays()[day];
         
 	}
 	
@@ -81,12 +98,9 @@ public class Model extends AbstractModel implements Runnable{
 		 * Deze methode moet door de array cars lopen en checken of er een car in de array zit en als die er inzit dan moet je die verwijdert worden.
 		 */
 		
-		for(int f = 0; f < numberOfFloors; f++) //aantal floors
-		{
-			for(int r = 0; r < numberOfRows; r++) //aantal rows
-			{
-				for(int p = 0; p < cars[f][r].length; p++)  //aantal plaatsen
-				{
+		for(int f = 0; f < numberOfFloors; f++){ //aantal floors
+			for(int r = 0; r < numberOfRows; r++){ //aantal rows
+				for(int p = 0; p < cars[f][r].length; p++){  //aantal plaatsen
 					if(cars[f][r][p] != null)					//checkt of de plaats leeg is of niet
 					removeCarAt(cars[f][r][p].getLocation());	//verwijdert de auto
 				}
@@ -106,6 +120,10 @@ public class Model extends AbstractModel implements Runnable{
 //	public void minusOne() {
 //		
 //	}
+	
+	public void sliderChanged(int sliderValue) {
+		timeScale = sliderValue;
+	}
 	
 	public void close() {
 		int option = JOptionPane.showConfirmDialog( 
@@ -146,6 +164,7 @@ public class Model extends AbstractModel implements Runnable{
     private void advanceTime(){
         // Advance the time by one minute.
         minute++;
+        tickPause = timeScale;
         while (minute > 59) {
             minute -= 60;
             hour++;
@@ -154,10 +173,17 @@ public class Model extends AbstractModel implements Runnable{
             hour -= 24;
             day++;
         }
-        while (day > 6) {
+        while (day > 7) {
             day -= 7;
         }
-
+        
+     // Get weekday name
+        DateFormatSymbols dfs = new DateFormatSymbols();
+        dayString =  dfs.getWeekdays()[day];
+        
+        //set the day + time
+        String timeString = dayString + " : " + hour + ":" + minute;
+		timeText.setText(timeString);
     }
 
     private void handleEntrance(){
