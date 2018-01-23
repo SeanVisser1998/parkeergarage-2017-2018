@@ -7,8 +7,6 @@ import javax.swing.JLabel;
 import java.awt.Color;
 import java.text.DateFormatSymbols;
 import java.util.Calendar;
-import java.util.LinkedList;
-import java.util.Queue;
 
 public class Model extends AbstractModel implements Runnable{
 	
@@ -53,7 +51,7 @@ public class Model extends AbstractModel implements Runnable{
     int weekDayPassArrivals= 50; // average number of arriving cars per hour
     int weekendPassArrivals = 5; // average number of arriving cars per hour
 
-    int enterSpeed = 10; // number of cars that can enter per minute
+    int enterSpeed = 3; // number of cars that can enter per minute
     int paymentSpeed = 7; // number of cars that can pay per minute
     int exitSpeed = 5; // number of cars that can leave per minute
 	
@@ -225,9 +223,9 @@ public class Model extends AbstractModel implements Runnable{
     	}
     	
     	if(day == 5 && hour >= 18 && hour < 23|| day == 6 && hour >= 18 && hour < 23 || day == 7 && hour >= 18 && hour < 23 || day == 0 && hour > 13 && hour < 18) {
-    		weekDayArrivals = 600;
+    		weekDayArrivals = 450;
     		weekDayPassArrivals = 100;
-    		weekendArrivals = 600;
+    		weekendArrivals = 450;
     		weekendPassArrivals = 100;
     	}
     	else if(day == 5 && hour >= 23 || day == 6 && hour >= 23 || day == 7 && hour >= 23) {

@@ -29,7 +29,7 @@ public class Controller extends AbstractController implements ActionListener{
 		resetButton = new JButton("Reset");
 		closeButton = new JButton("Close");
 		plusOne = new JButton ("+1");
-		timeScale = new JSlider(JSlider.HORIZONTAL,0, 200, 100);
+		timeScale = new JSlider(JSlider.HORIZONTAL,-50, 200, 100);
 		timeText = new JLabel();
 		timeText.setForeground(Color.white);
 		
@@ -48,8 +48,6 @@ public class Controller extends AbstractController implements ActionListener{
 		timeScale.addChangeListener(e -> sliderChanged() );
 		timeScale.setMajorTickSpacing(10);
 		timeScale.setMinorTickSpacing(5);
-		timeScale.setPaintTicks(true);
-		//timeScale.setPaintLabels(true);
 		add(startButton);
 		add(stopButton);
 		add(resetButton);
