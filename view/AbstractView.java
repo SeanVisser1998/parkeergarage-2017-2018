@@ -7,10 +7,11 @@ import javax.swing.JPanel;
 public abstract class AbstractView extends JPanel {
 
 	protected Model model;
-	
+
 	public AbstractView(Model model) {
 		this.model = model;
 		model.addView(this);
+		
 	}
 	
 	public void updateView() {

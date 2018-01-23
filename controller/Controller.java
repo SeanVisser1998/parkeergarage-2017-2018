@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JSlider;
 import javax.swing.JLabel;
+import java.awt.Color;
 
 import logic.Model;
 
@@ -28,10 +29,12 @@ public class Controller extends AbstractController implements ActionListener{
 		resetButton = new JButton("Reset");
 		closeButton = new JButton("Close");
 		plusOne = new JButton ("+1");
-//		minusOne = new JButton ("-1");
 		timeScale = new JSlider(JSlider.HORIZONTAL,0, 200, 100);
 		timeText = new JLabel();
+		timeText.setForeground(Color.white);
+		
 		model.timeText = timeText;
+
 		setUpPanel();
 	}
 	
@@ -42,7 +45,6 @@ public class Controller extends AbstractController implements ActionListener{
 		resetButton.addActionListener(this);
 		closeButton.addActionListener(this);
 		plusOne.addActionListener(this);
-//		minusOne.addActionListener(this);
 		timeScale.addChangeListener(e -> sliderChanged() );
 		timeScale.setMajorTickSpacing(10);
 		timeScale.setMinorTickSpacing(5);
@@ -53,9 +55,9 @@ public class Controller extends AbstractController implements ActionListener{
 		add(resetButton);
 		add(closeButton);
 		add(plusOne);
-//		add(minusOne);
 		add(timeScale);
 		add(timeText);
+		
 	}
 	
 	
@@ -90,8 +92,5 @@ public class Controller extends AbstractController implements ActionListener{
 			model.plusOne(); //1 stap verder in de simulatie
 			//bug(?): er gebeuren meerdere dingen in 1 stap vd simulatie ipv 1 ding tegelijk
 		}
-//		else if (e.getSource() == minusOne) {
-//			model.minusOne(); //TODO 1 stap terug in de simulatie
-//		}
 	}
 }

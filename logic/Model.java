@@ -1,6 +1,5 @@
 package logic;
 
-import java.awt.Color;
 import java.util.Random;
 import javax.swing.JOptionPane;
 import javax.swing.JLabel;
@@ -12,6 +11,7 @@ public class Model extends AbstractModel implements Runnable{
 	public static boolean run;
 	
 	public JLabel timeText;
+	public JLabel openSpots;
 	
 	private static final String AD_HOC = "1";
 	private static final String PASS = "2";
@@ -30,11 +30,14 @@ public class Model extends AbstractModel implements Runnable{
     private int minute = 0;
     private int timeScale = 100;
     private int tickPause = 100;
-    
+        
     int numberOfFloors;
     int numberOfRows;
     int numberOfPlaces;
     int numberOfOpenSpots;
+    
+    int numberOfPassCars;
+    int numberOfAdHoc;
 
     int weekDayArrivals= 100; // average number of arriving cars per hour
     int weekendArrivals = 200; // average number of arriving cars per hour
@@ -177,13 +180,16 @@ public class Model extends AbstractModel implements Runnable{
             day -= 7;
         }
         
-     // Get weekday name
+        //Get weekday name
         DateFormatSymbols dfs = new DateFormatSymbols();
         dayString =  dfs.getWeekdays()[day];
         
         //set the day + time
         String timeString = dayString + " : " + hour + ":" + minute;
 		timeText.setText(timeString);
+		
+		String spots = String.valueOf(this.numberOfOpenSpots);
+		openSpots.setText("Open spots: " + spots);
     }
 
     private void handleEntrance(){
