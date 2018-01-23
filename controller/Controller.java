@@ -36,6 +36,7 @@ public class Controller extends AbstractController implements ActionListener{
 		model.timeText = timeText;
 
 		setUpPanel();
+		
 	}
 	
 	private void setUpPanel(){

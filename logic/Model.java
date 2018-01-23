@@ -213,7 +213,7 @@ public class Model extends AbstractModel implements Runnable{
     		weekDayArrivals = 200;
     		weekDayPassArrivals = 50;
     		weekendArrivals = 100;
-    		weekendPassArrivals = 100;
+    		weekendPassArrivals = 55;
     	}
     	else {
     		weekDayArrivals = 20;
@@ -223,10 +223,10 @@ public class Model extends AbstractModel implements Runnable{
     	}
     	
     	if(day == 5 && hour >= 18 && hour < 23|| day == 6 && hour >= 18 && hour < 23 || day == 7 && hour >= 18 && hour < 23 || day == 0 && hour > 13 && hour < 18) {
-    		weekDayArrivals = 450;
-    		weekDayPassArrivals = 100;
-    		weekendArrivals = 450;
-    		weekendPassArrivals = 100;
+    		weekDayArrivals = 350;
+    		weekDayPassArrivals = 20;
+    		weekendArrivals = 350;
+    		weekendPassArrivals = 20;
     	}
     	else if(day == 5 && hour >= 23 || day == 6 && hour >= 23 || day == 7 && hour >= 23) {
     		weekDayArrivals = 20;

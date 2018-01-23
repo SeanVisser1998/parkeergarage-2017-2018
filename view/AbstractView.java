@@ -14,6 +14,10 @@ public abstract class AbstractView extends JPanel {
 		
 	}
 	
+	public Model getModel() {
+		return model;
+	}
+	
 	public void updateView() {
 		repaint();
 	}
