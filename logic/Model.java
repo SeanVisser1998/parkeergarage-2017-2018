@@ -241,8 +241,17 @@ public class Model extends AbstractModel implements Runnable{
         dayString =  dfs.getWeekdays()[day];
         
         //set the day + time
-        String timeString = dayString + " : " + hour + ":" + minute;
+        //leading zeroes toevoegen aan de tijd (bijv 1:5 word 01:05)
+        String timeHour = String.format("%02d", hour);
+        String timeMinute = String.format("%02d", minute);
+        String time = timeHour + ":" + timeMinute;
+        
+        
+        String timeString = dayString + "  " + time;
 		timeText.setText(timeString);
+		
+		String spots = String.valueOf(this.numberOfOpenSpots);
+		openSpots.setText("Open spots: " + spots);
 		
 		if(queue.carsInQueue() > 10) {
 			queue.removeCar();
