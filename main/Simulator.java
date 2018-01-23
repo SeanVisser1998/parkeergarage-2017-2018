@@ -22,7 +22,7 @@ public class Simulator extends JFrame{
 	
 	public Simulator() {
 		super("City Park - Groningen");
-		model = new Model(3, 6, 30);
+		model = new Model(3, 6, 30, 60);
 		controller = new Controller(model);
 		sidebar = new SideBar(model);
 		carParkView = new CarParkView(model);

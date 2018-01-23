@@ -3,8 +3,12 @@ package logic;
 import java.util.Random;
 import javax.swing.JOptionPane;
 import javax.swing.JLabel;
+
+import java.awt.Color;
 import java.text.DateFormatSymbols;
 import java.util.Calendar;
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class Model extends AbstractModel implements Runnable{
 	
@@ -25,7 +29,11 @@ public class Model extends AbstractModel implements Runnable{
     
     String dayString;
     
-    private int day = 0;
+    Calendar calendar;
+    
+    CarQueue queue;
+    
+    private int day = 1;
     private int hour = 0;
     private int minute = 0;
     private int timeScale = 100;
@@ -35,20 +43,21 @@ public class Model extends AbstractModel implements Runnable{
     int numberOfRows;
     int numberOfPlaces;
     int numberOfOpenSpots;
-    
     int numberOfPassCars;
     int numberOfAdHoc;
+    int numberOfPassPlaces;
+    int numberOfOpenPassPlaces;
 
     int weekDayArrivals= 100; // average number of arriving cars per hour
     int weekendArrivals = 200; // average number of arriving cars per hour
     int weekDayPassArrivals= 50; // average number of arriving cars per hour
     int weekendPassArrivals = 5; // average number of arriving cars per hour
 
-    int enterSpeed = 3; // number of cars that can enter per minute
+    int enterSpeed = 10; // number of cars that can enter per minute
     int paymentSpeed = 7; // number of cars that can pay per minute
     int exitSpeed = 5; // number of cars that can leave per minute
 	
-	public Model(int numberOfFloors, int numberOfRows, int numberOfPlaces) {
+	public Model(int numberOfFloors, int numberOfRows, int numberOfPlaces, int numberOfPassPlaces) {
 		run = false;
 		entranceCarQueue = new CarQueue();
         entrancePassQueue = new CarQueue();
@@ -57,13 +66,13 @@ public class Model extends AbstractModel implements Runnable{
         this.numberOfFloors = numberOfFloors;
         this.numberOfRows = numberOfRows;
         this.numberOfPlaces = numberOfPlaces;
+        this.numberOfOpenPassPlaces = numberOfPassPlaces;
         this.numberOfOpenSpots = numberOfFloors * numberOfRows * numberOfPlaces;
         cars = new Car[numberOfFloors][numberOfRows][numberOfPlaces];
-        
+        makePassPlaces(numberOfPassPlaces);
         
      // Create a calendar with year and day of year.
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.DAY_OF_YEAR, 180);
+        calendar = Calendar.getInstance();
         
         // Get the weekday
         day = calendar.get(Calendar.DAY_OF_WEEK);
@@ -101,19 +110,34 @@ public class Model extends AbstractModel implements Runnable{
 		 * Deze methode moet door de array cars lopen en checken of er een car in de array zit en als die er inzit dan moet je die verwijdert worden.
 		 */
 		
-		for(int f = 0; f < numberOfFloors; f++){ //aantal floors
-			for(int r = 0; r < numberOfRows; r++){ //aantal rows
-				for(int p = 0; p < cars[f][r].length; p++){  //aantal plaatsen
-					if(cars[f][r][p] != null)					//checkt of de plaats leeg is of niet
-					removeCarAt(cars[f][r][p].getLocation());	//verwijdert de auto
+		for(int f = 0; f < numberOfFloors; f++){ 						//aantal floors
+			for(int r = 0; r < numberOfRows; r++){ 						//aantal rows
+				for(int p = 0; p < cars[f][r].length; p++){  			//aantal plaatsen
+					if(cars[f][r][p] != null){							//checkt of de plaats leeg is of niet
+						Object color = cars[f][r][p].getColor();
+						Color passCar = Color.blue;
+						if(color == passCar){
+							removeCarAt(cars[f][r][p].getLocation());	//verwijdert de auto
+							remakePassLocation();
+						}
+						Color passPlace = Color.magenta;
+						if(color == passPlace){
+							removeCarAt(cars[f][r][p].getLocation());	//verwijdert de auto
+							remakePassLocation();
+						}else{
+						removeCarAt(cars[f][r][p].getLocation());		//verwijdert de auto
+						}	
+					}
 				}
 			}
 		}
 		run = false;
 		tick();
-		day = 0;
+		day = calendar.get(Calendar.DAY_OF_WEEK);
 		hour = 0;
 		minute = 0;
+		weekDayArrivals = 10;
+		weekDayPassArrivals = 5;
 	}
 	
 	public void plusOne() {
@@ -156,12 +180,17 @@ public class Model extends AbstractModel implements Runnable{
     	return numberOfOpenSpots;
     }
     
+    public int getNumberOfOpenPassPlaces(){
+    	return numberOfOpenPassPlaces;
+    }
+    
     private void tick() {
     	oldTick();
     	advanceTime();
     	handleExit();
     	notifyViews();
     	handleEntrance();
+    	timeHandling();
     }
 
     private void advanceTime(){
@@ -179,8 +208,37 @@ public class Model extends AbstractModel implements Runnable{
         while (day > 7) {
             day -= 7;
         }
-        
-        //Get weekday name
+    }
+    
+    private void timeHandling() {
+    	if(hour >= 7 && hour < 16) {
+    		weekDayArrivals = 200;
+    		weekDayPassArrivals = 50;
+    		weekendArrivals = 100;
+    		weekendPassArrivals = 100;
+    	}
+    	else {
+    		weekDayArrivals = 20;
+    		weekDayPassArrivals = 10;
+    		weekendArrivals = 20;
+    		weekendPassArrivals = 15;
+    	}
+    	
+    	if(day == 5 && hour >= 18 && hour < 23|| day == 6 && hour >= 18 && hour < 23 || day == 7 && hour >= 18 && hour < 23 || day == 0 && hour > 13 && hour < 18) {
+    		weekDayArrivals = 600;
+    		weekDayPassArrivals = 100;
+    		weekendArrivals = 600;
+    		weekendPassArrivals = 100;
+    	}
+    	else if(day == 5 && hour >= 23 || day == 6 && hour >= 23 || day == 7 && hour >= 23) {
+    		weekDayArrivals = 20;
+    		weekDayPassArrivals = 10;
+    		weekendArrivals = 20;
+    		weekendPassArrivals = 10;
+    	}
+    	
+    	
+    	 // Get weekday name
         DateFormatSymbols dfs = new DateFormatSymbols();
         dayString =  dfs.getWeekdays()[day];
         
@@ -188,10 +246,51 @@ public class Model extends AbstractModel implements Runnable{
         String timeString = dayString + " : " + hour + ":" + minute;
 		timeText.setText(timeString);
 		
-		String spots = String.valueOf(this.numberOfOpenSpots);
-		openSpots.setText("Open spots: " + spots);
+		if(queue.carsInQueue() > 10) {
+			queue.removeCar();
+		}
     }
+    
+    public void makePassPlaces(int numberOfSpots) {
+        numberOfPassPlaces = numberOfSpots;
 
+        int x = 0,
+            z = 0,
+            y = 0;
+
+        for (int i=0; i<numberOfSpots; i++) {
+            if (z == numberOfPlaces) {
+                if (x == numberOfRows - 1) {
+                    y++;
+                    x = 0;
+                    z = 0;
+                }else {
+                    x += 1;
+                    z = 0;
+                	}
+            	}
+            setPassHolderSpace(new Location(y, x, z), new PassPlace());
+            z++;
+        	}
+        }
+    
+        public boolean setPassHolderSpace(Location loc, PassPlace phs) {
+            if (!locationIsValid(loc))
+                return false;
+
+            Car oldCar = getCarAt(loc);
+            if(oldCar == null) {
+                cars[2][0][loc.getPlace()] = phs;
+                cars[2][1][loc.getPlace()] = phs;
+                cars[2][2][loc.getPlace()] = phs;
+                cars[2][3][loc.getPlace()] = phs;
+                phs.setLocation(loc);
+                return true;
+            }
+
+            return false;
+        }
+    
     private void handleEntrance(){
     	carsArriving();
     	carsEntering(entrancePassQueue);
@@ -212,15 +311,23 @@ public class Model extends AbstractModel implements Runnable{
     }
 
     private void carsEntering(CarQueue queue){
+    	this.queue = queue;
         int i=0;
         // Remove car from the front of the queue and assign to a parking space.
     	while (queue.carsInQueue()>0 && 
-    			getNumberOfOpenSpots()>0 && 
+    			getNumberOfOpenSpots()>0 &&
+    			getNumberOfOpenPassPlaces()>0 &&
     			i<enterSpeed) {
             Car car = queue.removeCar();
-            Location freeLocation = getFirstFreeLocation();
-            setCarAt(freeLocation, car);
-            i++;
+            if(queue == entrancePassQueue){
+            	Location freePassLocation = getFirstPassLocation();
+            	setCarAt(freePassLocation, car);
+            	i++;
+            }else{
+            	Location freeLocation = getFirstFreeLocation();
+            	setCarAt(freeLocation, car);
+            	i++;
+            }
         }
     }
     
@@ -234,6 +341,7 @@ public class Model extends AbstractModel implements Runnable{
         	}
         	else {
         		carLeavesSpot(car);
+        		remakePassLocation();
         	}
             car = getFirstLeavingCar();
         }
@@ -310,7 +418,11 @@ public class Model extends AbstractModel implements Runnable{
         if (oldCar == null) {
             cars[location.getFloor()][location.getRow()][location.getPlace()] = car;
             car.setLocation(location);
+            if(car.getHasToPay()==false){
+            	numberOfOpenPassPlaces--;
+            }else{
             numberOfOpenSpots--;
+            }
             return true;
         }
         return false;
@@ -326,7 +438,11 @@ public class Model extends AbstractModel implements Runnable{
         }
         cars[location.getFloor()][location.getRow()][location.getPlace()] = null;
         car.setLocation(null);
-        numberOfOpenSpots++;
+        if(car.getHasToPay() == true){
+        	numberOfOpenSpots++;
+        }else{
+        	numberOfOpenPassPlaces++;
+        }
         return car;
     }
 
@@ -343,7 +459,37 @@ public class Model extends AbstractModel implements Runnable{
         }
         return null;
     }
+    
+    public Location getFirstPassLocation() {
+        for (int floor = 0; floor < getNumberOfFloors(); floor++) {
+            for (int row = 0; row < getNumberOfRows(); row++) {
+                for (int place = 0; place < getNumberOfPlaces(); place++) {
+                    Location location = new Location(floor, row, place);
+                    if(getCarAt(location) != null) {
+                        if(getCarAt(location).getColor() == PassPlace.COLOR) {
+                            removeCarAt(location);
+                            return location;
+                        }
+                    }
+                }
+            }
+        }
+        return null;
+    }
 
+    public void remakePassLocation() {
+        for (int floor = 2; floor < getNumberOfFloors(); floor++) {
+            for (int row = 0; row < getNumberOfRows() && row < 4; row++) {
+                for (int place = 0; place < getNumberOfPlaces(); place++) {
+                    Location location = new Location(floor, row, place);
+                    if(getCarAt(location) == null) {
+                        setPassHolderSpace(location, new PassPlace());
+                        }
+                    }
+                }
+            }
+    }
+    
     public Car getFirstLeavingCar() {
         for (int floor = 0; floor < getNumberOfFloors(); floor++) {
             for (int row = 0; row < getNumberOfRows(); row++) {
