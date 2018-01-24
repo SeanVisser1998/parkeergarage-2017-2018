@@ -132,7 +132,7 @@ public class Model extends AbstractModel implements Runnable{
 							removeCarAt(cars[f][r][p].getLocation());	//verwijdert de auto
 							remakePassLocation();
 						}
-						Color passPlace = Color.magenta;
+						Color passPlace = PassPlace.COLOR;
 						if(color == passPlace){
 							removeCarAt(cars[f][r][p].getLocation());	//verwijdert de auto
 							remakePassLocation();
@@ -452,8 +452,9 @@ public class Model extends AbstractModel implements Runnable{
             car.setLocation(location);
             if(car.getHasToPay()==false){
             	numberOfOpenPassPlaces--;
+//            	numberOfOpenSpots--;
             }else{
-            numberOfOpenSpots--;
+            	numberOfOpenSpots--;
             }
             return true;
         }
@@ -474,6 +475,7 @@ public class Model extends AbstractModel implements Runnable{
         	numberOfOpenSpots++;
         }else{
         	numberOfOpenPassPlaces++;
+//        	numberOfOpenSpots++;
         }
         return car;
     }
