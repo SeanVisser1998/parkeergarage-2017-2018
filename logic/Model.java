@@ -17,6 +17,7 @@ public class Model extends AbstractModel implements Runnable{
 	
 	private static final String AD_HOC = "1";
 	private static final String PASS = "2";
+	private static final String RESERVE = "3";
 	
 	private CarQueue entranceCarQueue;
     private CarQueue entrancePassQueue;
@@ -46,10 +47,12 @@ public class Model extends AbstractModel implements Runnable{
     int numberOfPassPlaces;
     int numberOfOpenPassPlaces;
 
+    int numberOfReserve;
+    
     int weekDayArrivals= 100; // average number of arriving cars per hour
     int weekendArrivals = 200; // average number of arriving cars per hour
-    int weekDayPassArrivals= 50; // average number of arriving cars per hour
-    int weekendPassArrivals = 5; // average number of arriving cars per hour
+    int weekDayPassArrivals= 500; // average number of arriving cars per hour
+    int weekendPassArrivals = 500; // average number of arriving cars per hour
 
     int enterSpeed = 3; // number of cars that can enter per minute
     int paymentSpeed = 7; // number of cars that can pay per minute
@@ -79,6 +82,17 @@ public class Model extends AbstractModel implements Runnable{
         DateFormatSymbols dfs = new DateFormatSymbols();
         dayString =  dfs.getWeekdays()[day];
         
+	}
+	public int getNumberOfReserved() {
+		return numberOfReserve;
+	}
+	
+	public void addReserved() {
+		numberOfReserve ++;
+	}
+	
+	public void removeReserved() {
+		numberOfReserve --;
 	}
 	
 	public void run() {
@@ -142,10 +156,6 @@ public class Model extends AbstractModel implements Runnable{
 		tick();
 	}
 	
-//	public void minusOne() {
-//		
-//	}
-	
 	public void sliderChanged(int sliderValue) {
 		timeScale = sliderValue;
 	}
@@ -189,6 +199,9 @@ public class Model extends AbstractModel implements Runnable{
     	notifyViews();
     	handleEntrance();
     	timeHandling();
+    	if(numberOfReserve > 0) {
+    		removeReserved();
+    	}
     }
 
     private void advanceTime(){
@@ -311,10 +324,18 @@ public class Model extends AbstractModel implements Runnable{
     }
     
     private void carsArriving(){
-    	int numberOfCars=getNumberOfCars(weekDayArrivals, weekendArrivals);
-        addArrivingCars(numberOfCars, AD_HOC);    	
-    	numberOfCars=getNumberOfCars(weekDayPassArrivals, weekendPassArrivals);
-        addArrivingCars(numberOfCars, PASS);    	
+    	int numberOfCars = getNumberOfCars(weekDayArrivals, weekendArrivals);
+        addArrivingCars(numberOfCars, AD_HOC);
+        
+    	numberOfCars = getNumberOfCars(weekDayPassArrivals, weekendPassArrivals);
+        addArrivingCars(numberOfCars, PASS);
+        
+        numberOfCars = getNumberOfReserveCars();
+        addArrivingCars(numberOfCars, RESERVE);
+    }
+    
+    private int getNumberOfReserveCars() {
+    	return numberOfReserve;
     }
 
     private void carsEntering(CarQueue queue){
@@ -400,7 +421,11 @@ public class Model extends AbstractModel implements Runnable{
             for (int i = 0; i < numberOfCars; i++) {
             	entrancePassQueue.addCar(new ParkingPassCar());
             }
-            break;	            
+            break;
+    	case RESERVE:
+    		for (int i = 0; i <numberOfCars; i++) {
+    			entranceCarQueue.addCar(new ReservedCar());
+    		}
     	}
     }
     

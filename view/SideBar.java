@@ -14,10 +14,7 @@ public class SideBar extends AbstractView {
 		
 	public SideBar(Model model) {
 		super(model);
-		spots = String.valueOf(model.getNumberOfOpenSpots());
-		
-		
-	
+		spots = String.valueOf(model.getNumberOfOpenSpots());	
 		
 		//new JLabel(); -> NODIG ANDERS NULLPOINTEREXCEPTION
 		openSpots = new JLabel();
