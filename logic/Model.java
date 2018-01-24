@@ -14,9 +14,11 @@ public class Model extends AbstractModel implements Runnable{
 	
 	public JLabel timeText;
 	public JLabel openSpots;
+	public JLabel totalOpbrengst;
 	
 	private static final String AD_HOC = "1";
 	private static final String PASS = "2";
+	private static final String RESERVE = "3";
 	
 	private CarQueue entranceCarQueue;
     private CarQueue entrancePassQueue;
@@ -30,6 +32,9 @@ public class Model extends AbstractModel implements Runnable{
     Calendar calendar;
     
     CarQueue queue;
+    
+    private int ticketPrijs = 10;
+    private int opbrengst;
     
     private int day = 1;
     private int hour = 0;
@@ -46,10 +51,12 @@ public class Model extends AbstractModel implements Runnable{
     int numberOfPassPlaces;
     int numberOfOpenPassPlaces;
 
+    int numberOfReserve;
+    
     int weekDayArrivals= 100; // average number of arriving cars per hour
     int weekendArrivals = 200; // average number of arriving cars per hour
-    int weekDayPassArrivals= 50; // average number of arriving cars per hour
-    int weekendPassArrivals = 5; // average number of arriving cars per hour
+    int weekDayPassArrivals= 500; // average number of arriving cars per hour
+    int weekendPassArrivals = 500; // average number of arriving cars per hour
 
     int enterSpeed = 3; // number of cars that can enter per minute
     int paymentSpeed = 7; // number of cars that can pay per minute
@@ -79,6 +86,17 @@ public class Model extends AbstractModel implements Runnable{
         DateFormatSymbols dfs = new DateFormatSymbols();
         dayString =  dfs.getWeekdays()[day];
         
+	}
+	public int getNumberOfReserved() {
+		return numberOfReserve;
+	}
+	
+	public void addReserved() {
+		numberOfReserve ++;
+	}
+	
+	public void removeReserved() {
+		numberOfReserve --;
 	}
 	
 	public void run() {
@@ -142,10 +160,6 @@ public class Model extends AbstractModel implements Runnable{
 		tick();
 	}
 	
-//	public void minusOne() {
-//		
-//	}
-	
 	public void sliderChanged(int sliderValue) {
 		timeScale = sliderValue;
 	}
@@ -189,6 +203,9 @@ public class Model extends AbstractModel implements Runnable{
     	notifyViews();
     	handleEntrance();
     	timeHandling();
+    	if(numberOfReserve > 0) {
+    		removeReserved();
+    	}
     }
 
     private void advanceTime(){
@@ -249,7 +266,7 @@ public class Model extends AbstractModel implements Runnable{
         
         String timeString = dayString + "  " + time;
 		timeText.setText(timeString);
-		
+				
 		String spots = String.valueOf(this.numberOfOpenSpots);
 		openSpots.setText("Open spots: " + spots);
 		
@@ -311,10 +328,18 @@ public class Model extends AbstractModel implements Runnable{
     }
     
     private void carsArriving(){
-    	int numberOfCars=getNumberOfCars(weekDayArrivals, weekendArrivals);
-        addArrivingCars(numberOfCars, AD_HOC);    	
-    	numberOfCars=getNumberOfCars(weekDayPassArrivals, weekendPassArrivals);
-        addArrivingCars(numberOfCars, PASS);    	
+    	int numberOfCars = getNumberOfCars(weekDayArrivals, weekendArrivals);
+        addArrivingCars(numberOfCars, AD_HOC);
+        
+    	numberOfCars = getNumberOfCars(weekDayPassArrivals, weekendPassArrivals);
+        addArrivingCars(numberOfCars, PASS);
+        
+        numberOfCars = getNumberOfReserveCars();
+        addArrivingCars(numberOfCars, RESERVE);
+    }
+    
+    private int getNumberOfReserveCars() {
+    	return numberOfReserve;
     }
 
     private void carsEntering(CarQueue queue){
@@ -359,7 +384,10 @@ public class Model extends AbstractModel implements Runnable{
     	int i=0;
     	while (paymentCarQueue.carsInQueue()>0 && i < paymentSpeed){
             Car car = paymentCarQueue.removeCar();
-            // TODO Handle payment.
+            opbrengst += ticketPrijs;
+            System.out.println(opbrengst);
+    		totalOpbrengst.setText("Totale opbrengst: "+String.valueOf(opbrengst));
+
             carLeavesSpot(car);
             i++;
     	}
@@ -400,7 +428,11 @@ public class Model extends AbstractModel implements Runnable{
             for (int i = 0; i < numberOfCars; i++) {
             	entrancePassQueue.addCar(new ParkingPassCar());
             }
-            break;	            
+            break;
+    	case RESERVE:
+    		for (int i = 0; i <numberOfCars; i++) {
+    			entranceCarQueue.addCar(new ReservedCar());
+    		}
     	}
     }
     

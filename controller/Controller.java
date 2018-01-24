@@ -21,6 +21,7 @@ public class Controller extends AbstractController implements ActionListener{
 //	JButton minusOne;
 	JSlider timeScale;
 	JLabel timeText;
+	JButton addReserved;
 	
 	public Controller(Model model) {
 		super(model);
@@ -31,6 +32,9 @@ public class Controller extends AbstractController implements ActionListener{
 		plusOne = new JButton ("+1");
 		timeScale = new JSlider(JSlider.HORIZONTAL,-50, 200, 100);
 		timeText = new JLabel();
+		
+		addReserved = new JButton("Add reserved");
+		
 		timeText.setForeground(Color.white);
 		
 		model.timeText = timeText;
@@ -46,6 +50,8 @@ public class Controller extends AbstractController implements ActionListener{
 		resetButton.addActionListener(this);
 		closeButton.addActionListener(this);
 		plusOne.addActionListener(this);
+		addReserved.addActionListener(this);
+		
 		timeScale.addChangeListener(e -> sliderChanged() );
 		timeScale.setMajorTickSpacing(10);
 		timeScale.setMinorTickSpacing(5);
@@ -56,6 +62,7 @@ public class Controller extends AbstractController implements ActionListener{
 		add(plusOne);
 		add(timeScale);
 		add(timeText);
+		add(addReserved);
 		
 	}
 	
@@ -90,6 +97,9 @@ public class Controller extends AbstractController implements ActionListener{
 		else if (e.getSource() == plusOne) {
 			model.plusOne(); //1 stap verder in de simulatie
 			//bug(?): er gebeuren meerdere dingen in 1 stap vd simulatie ipv 1 ding tegelijk
+		}
+		else if (e.getSource() == addReserved) {
+			model.addReserved();
 		}
 	}
 }
