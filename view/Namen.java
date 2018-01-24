@@ -29,7 +29,7 @@ public class Namen extends AbstractView {
 		Pyter.setText("Pyter vd Leij");
 		
 		Rutger = new JLabel();
-		Rutger.setText("Rutger Rozedal");
+		Rutger.setText("Rutger Rozendal");
 		
 		Sean = new JLabel();
 		Sean.setText("Sean Visser");
