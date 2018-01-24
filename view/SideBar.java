@@ -9,6 +9,7 @@ import logic.Model;
 public class SideBar extends AbstractView {
 	JLabel openSpots;
 	JLabel timeText;
+	JLabel totalOpbrengst;
 	
 	String spots;
 		
@@ -25,14 +26,22 @@ public class SideBar extends AbstractView {
 		timeText = new JLabel();
 		model.timeText = timeText;
 		
+		totalOpbrengst = new JLabel();
+		model.totalOpbrengst = totalOpbrengst;
+		
+		openSpots.setText("Open spots:");
+		timeText.setText("Datum");
+        totalOpbrengst.setText("Totale opbrengst: 0");
+
 		setUpSideBar();
 	}
 	
 	private void setUpSideBar() {
-		setLayout(new GridLayout(2,0));
+		setLayout(new GridLayout(6,0));
 		
 		//Voeg JLabels toe aan sidebar
 		add(openSpots);
 		add(timeText);
+		add(totalOpbrengst);
 	}
 }

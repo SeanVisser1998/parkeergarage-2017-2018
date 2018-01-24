@@ -14,6 +14,7 @@ public class Model extends AbstractModel implements Runnable{
 	
 	public JLabel timeText;
 	public JLabel openSpots;
+	public JLabel totalOpbrengst;
 	
 	private static final String AD_HOC = "1";
 	private static final String PASS = "2";
@@ -31,6 +32,9 @@ public class Model extends AbstractModel implements Runnable{
     Calendar calendar;
     
     CarQueue queue;
+    
+    private int ticketPrijs = 10;
+    private int opbrengst;
     
     private int day = 1;
     private int hour = 0;
@@ -262,7 +266,7 @@ public class Model extends AbstractModel implements Runnable{
         
         String timeString = dayString + "  " + time;
 		timeText.setText(timeString);
-		
+				
 		String spots = String.valueOf(this.numberOfOpenSpots);
 		openSpots.setText("Open spots: " + spots);
 		
@@ -380,7 +384,10 @@ public class Model extends AbstractModel implements Runnable{
     	int i=0;
     	while (paymentCarQueue.carsInQueue()>0 && i < paymentSpeed){
             Car car = paymentCarQueue.removeCar();
-            // TODO Handle payment.
+            opbrengst += ticketPrijs;
+            System.out.println(opbrengst);
+    		totalOpbrengst.setText("Totale opbrengst: "+String.valueOf(opbrengst));
+
             carLeavesSpot(car);
             i++;
     	}
