@@ -2,6 +2,7 @@ package view;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Image;
 
@@ -9,9 +10,8 @@ import logic.Car;
 import logic.Location;
 import logic.Model;
 
-@SuppressWarnings("serial")
 public class CarParkView extends AbstractView{
-
+	
 	private Dimension size;
     private Image carParkImage; 
 
@@ -25,6 +25,8 @@ public class CarParkView extends AbstractView{
     }
 
     public void paintComponent(Graphics g) {
+    	
+    	
         if (carParkImage == null) {
             return;
         }
@@ -37,6 +39,12 @@ public class CarParkView extends AbstractView{
             g.drawImage(carParkImage, 0, 0, currentSize.width, currentSize.height, null);
         }
     }
+    
+    /*
+     * Normaal: Places 0 t/m 360 = wit
+     * Res: Places 360 t/m 420 = geel
+     * Pas: Places 420 t/m 540 = blauw
+     */
 
     public void updateView() {
         if (!size.equals(getSize())) {
@@ -49,8 +57,11 @@ public class CarParkView extends AbstractView{
                 for(int place = 0; place < model.getNumberOfPlaces(); place++) {
                     Location location = new Location(floor, row, place);
                     Car car = model.getCarAt(location);
+                    
+                    
                     Color color = car == null ? Color.white : car.getColor();
                     drawPlace(graphics, location, color);
+                    
                 }
             }
         }

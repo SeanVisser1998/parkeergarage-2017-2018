@@ -1,24 +1,41 @@
 package logic;
 
-import java.util.Random;
-import javax.swing.JOptionPane;
-import javax.swing.JLabel;
-
-import java.awt.Color;
 import java.text.DateFormatSymbols;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Random;
+
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 
 public class Model extends AbstractModel implements Runnable{
 	
 	public static boolean run;
 	
-	public JLabel timeText;
-	public JLabel openSpots;
-	public JLabel totalOpbrengst;
+	public JLabel normalCar;
+	public JLabel resCar;
+	public JLabel passCar;
+	public JLabel totalCar;
+	
+	public JLabel omzet;
+	public JLabel normaalOmzet;
+	public JLabel reserveerOmzet;
+	
+	public JLabel datum;
 	
 	private static final String AD_HOC = "1";
 	private static final String PASS = "2";
 	private static final String RESERVE = "3";
+	
+	private int countCar;
+	private int countPass;
+	private int countRes;
+	
+	private int gemTicketPrijs;
+	private int fee;
+	private int totaalOmzet;
+	private int normaalIntOmzet;
+	private int reserveerIntOmzet;
 	
 	private CarQueue entranceCarQueue;
     private CarQueue entrancePassQueue;
@@ -31,38 +48,31 @@ public class Model extends AbstractModel implements Runnable{
     
     Calendar calendar;
     
-    CarQueue queue;
-    
-    private int ticketPrijs = 10;
-    private int opbrengst;
-    
-    private int day = 1;
+    private int day = 0;
     private int hour = 0;
     private int minute = 0;
+
     private int timeScale = 100;
     private int tickPause = 100;
-        
+    
     int numberOfFloors;
     int numberOfRows;
     int numberOfPlaces;
     int numberOfOpenSpots;
-    int numberOfPassCars;
-    int numberOfAdHoc;
-    int numberOfPassPlaces;
-    int numberOfOpenPassPlaces;
 
-    int numberOfReserve;
-    
     int weekDayArrivals= 100; // average number of arriving cars per hour
     int weekendArrivals = 200; // average number of arriving cars per hour
-    int weekDayPassArrivals= 500; // average number of arriving cars per hour
-    int weekendPassArrivals = 500; // average number of arriving cars per hour
+    int weekDayPassArrivals= 50; // average number of arriving cars per hour
+    int weekendPassArrivals = 5; // average number of arriving cars per hour
+    
+    int weekResArrivals = 30;
+    int weekendResArrivals = 20;
 
     int enterSpeed = 3; // number of cars that can enter per minute
     int paymentSpeed = 7; // number of cars that can pay per minute
     int exitSpeed = 5; // number of cars that can leave per minute
 	
-	public Model(int numberOfFloors, int numberOfRows, int numberOfPlaces, int numberOfPassPlaces) {
+	public Model(int numberOfFloors, int numberOfRows, int numberOfPlaces) {
 		run = false;
 		entranceCarQueue = new CarQueue();
         entrancePassQueue = new CarQueue();
@@ -71,33 +81,102 @@ public class Model extends AbstractModel implements Runnable{
         this.numberOfFloors = numberOfFloors;
         this.numberOfRows = numberOfRows;
         this.numberOfPlaces = numberOfPlaces;
-        this.numberOfOpenPassPlaces = numberOfPassPlaces;
         this.numberOfOpenSpots = numberOfFloors * numberOfRows * numberOfPlaces;
         cars = new Car[numberOfFloors][numberOfRows][numberOfPlaces];
-        makePassPlaces(numberOfPassPlaces);
         
-     // Create a calendar with year and day of year.
+        this.countCar = 0;
+        this.countPass = 0;
+        this.countRes = 0;
+        
+        this.gemTicketPrijs = 10;
+        this.fee = 2;
+        this.totaalOmzet = 0;
+        this.normaalIntOmzet = 0;
+        this.reserveerIntOmzet = 0;
+        
         calendar = Calendar.getInstance();
-        
-        // Get the weekday
+       
         day = calendar.get(Calendar.DAY_OF_WEEK);
-
-        // Get weekday name
         DateFormatSymbols dfs = new DateFormatSymbols();
-        dayString =  dfs.getWeekdays()[day];
+        dayString = dfs.getWeekdays()[day];
+        
+        calendar.add(Calendar.DATE, 1);
+        SimpleDateFormat format1 = new SimpleDateFormat("dd-MM-yyyy");
+        
+        String datumString = dayString + ": "+ format1.format(calendar.getTime());
+        System.out.println(datumString);
+        
+        System.out.println(entranceCarQueue);
+        
+        
         
 	}
-	public int getNumberOfReserved() {
-		return numberOfReserve;
+	
+	public int getCountCar() {
+		return countCar;
 	}
 	
-	public void addReserved() {
-		numberOfReserve ++;
+	public int getCountPass() {
+		return countPass;
 	}
 	
-	public void removeReserved() {
-		numberOfReserve --;
+	public int getCountRes() {
+		return countRes;
 	}
+	
+	public int getCountTotalCar() {
+		return countCar+countPass+countRes;
+	}
+	
+	
+	public int getGemTicketPrijs() {
+		return gemTicketPrijs;
+	}
+	
+	public int getNormaalOmzet() {
+		return normaalIntOmzet * gemTicketPrijs;
+	}
+	
+	public int getReserveerOmzet() {
+		return reserveerIntOmzet * gemTicketPrijs + reserveerIntOmzet * fee;
+	}
+	
+	public int getTotaalOmzet() {
+		return totaalOmzet;
+	}
+	
+	
+	public void reset() {
+		/*
+		 * moet nog gedaan worden :)
+		 */
+		for(int floor = 0; floor < getNumberOfFloors(); floor++) {
+			  for(int row = 0; row < getNumberOfRows(); row++) {
+				  for(int place = 0; place < getNumberOfPlaces(); place++) {
+	                	
+	                }
+	            }
+		}
+          
+                
+	}
+	
+	public void sliderChanged(int sliderValue) {
+		timeScale = sliderValue;
+	}
+	
+	public void close() {
+		int option = JOptionPane.showConfirmDialog( 
+				
+                null, "Are you sure you want to close the application?",
+                "Close Confirmation", 
+                JOptionPane.YES_NO_OPTION, 
+                JOptionPane.QUESTION_MESSAGE);
+        if (option == JOptionPane.YES_OPTION) {
+                System.exit(0);
+        }
+	}
+	
 	
 	public void run() {
 		run = true;
@@ -119,61 +198,7 @@ public class Model extends AbstractModel implements Runnable{
 	
 	public void stop() {
 		run = false;
-	}
-	
-	public void reset() {
-		/*
-		 * Deze methode moet door de array cars lopen en checken of er een car in de array zit en als die er inzit dan moet je die verwijdert worden.
-		 */
-		
-		for(int f = 0; f < numberOfFloors; f++){ 						//aantal floors
-			for(int r = 0; r < numberOfRows; r++){ 						//aantal rows
-				for(int p = 0; p < cars[f][r].length; p++){  			//aantal plaatsen
-					if(cars[f][r][p] != null){							//checkt of de plaats leeg is of niet
-						Object color = cars[f][r][p].getColor();
-						Color passCar = Color.blue;
-						if(color == passCar){
-							removeCarAt(cars[f][r][p].getLocation());	//verwijdert de auto
-							remakePassLocation();
-						}
-						Color passPlace = PassPlace.COLOR;
-						if(color == passPlace){
-							removeCarAt(cars[f][r][p].getLocation());	//verwijdert de auto
-							remakePassLocation();
-						}else{
-						removeCarAt(cars[f][r][p].getLocation());		//verwijdert de auto
-						}	
-					}
-				}
-			}
-		}
-		run = false;
-		tick();
-		day = calendar.get(Calendar.DAY_OF_WEEK);
-		hour = 0;
-		minute = 0;
-		weekDayArrivals = 10;
-		weekDayPassArrivals = 5;
-	}
-	
-	public void plusOne() {
-		tick();
-	}
-	
-	public void sliderChanged(int sliderValue) {
-		timeScale = sliderValue;
-	}
-	
-	public void close() {
-		int option = JOptionPane.showConfirmDialog( 
-								
-                null, "Are you sure you want to close the application?",
-                "Close Confirmation", 
-                JOptionPane.YES_NO_OPTION, 
-                JOptionPane.QUESTION_MESSAGE);
-        if (option == JOptionPane.YES_OPTION) {
-                System.exit(0);
-        }
+		System.out.println("Stopped!");
 	}
 	
 	public int getNumberOfFloors() {
@@ -192,20 +217,27 @@ public class Model extends AbstractModel implements Runnable{
     	return numberOfOpenSpots;
     }
     
-    public int getNumberOfOpenPassPlaces(){
-    	return numberOfOpenPassPlaces;
-    }
-    
     private void tick() {
     	oldTick();
     	advanceTime();
     	handleExit();
     	notifyViews();
     	handleEntrance();
+    	
     	timeHandling();
-    	if(numberOfReserve > 0) {
-    		removeReserved();
-    	}
+    	handleJLabel();
+    }
+    
+    private void handleJLabel() {
+    	normalCar.setText("Aantal normale auto's: " + getCountCar());
+    	resCar.setText("Aantal gereserveerde auto's: " + getCountRes());
+    	passCar.setText("Aantal auto's met een pas: " + getCountPass());
+    	totalCar.setText("Totaal aantal auto's: " + getCountTotalCar());
+    	
+    	omzet.setText("Totale omzet: €" + getTotaalOmzet());;
+    	normaalOmzet.setText("Omzet normale auto's: €" + getNormaalOmzet());;
+    	reserveerOmzet.setText("Omzet gereserveerde auto's: €" + getReserveerOmzet());    	
+    	
     }
 
     private void advanceTime(){
@@ -220,21 +252,30 @@ public class Model extends AbstractModel implements Runnable{
             hour -= 24;
             day++;
         }
-        while (day > 7) {
+        while (day > 6) {
             day -= 7;
         }
+
     }
     
     private void timeHandling() {
     	if(hour >= 7 && hour < 16) {
     		weekDayArrivals = 200;
     		weekDayPassArrivals = 50;
+    		
     		weekendArrivals = 100;
     		weekendPassArrivals = 55;
+    		
+    		weekResArrivals = 30;
+    		weekendResArrivals = 20;
     	}
     	else {
     		weekDayArrivals = 20;
     		weekDayPassArrivals = 10;
+    		
+    		weekResArrivals = 3;
+    		weekendResArrivals = 2;
+    		
     		weekendArrivals = 20;
     		weekendPassArrivals = 15;
     	}
@@ -242,12 +283,20 @@ public class Model extends AbstractModel implements Runnable{
     	if(day == 5 && hour >= 18 && hour < 23|| day == 6 && hour >= 18 && hour < 23 || day == 7 && hour >= 18 && hour < 23 || day == 0 && hour > 13 && hour < 18) {
     		weekDayArrivals = 350;
     		weekDayPassArrivals = 20;
+    		
+    		weekResArrivals = 20;
+    		weekendResArrivals = 15;
+    		
     		weekendArrivals = 350;
     		weekendPassArrivals = 20;
     	}
     	else if(day == 5 && hour >= 23 || day == 6 && hour >= 23 || day == 7 && hour >= 23) {
     		weekDayArrivals = 20;
     		weekDayPassArrivals = 10;
+    		
+    		weekResArrivals = 30;
+    		weekendResArrivals = 20;
+    		
     		weekendArrivals = 20;
     		weekendPassArrivals = 10;
     	}
@@ -265,60 +314,14 @@ public class Model extends AbstractModel implements Runnable{
         
         
         String timeString = dayString + "  " + time;
-		timeText.setText(timeString);
-				
-		String spots = String.valueOf(this.numberOfOpenSpots);
-		openSpots.setText("Open spots: " + spots);
-		
-		if(queue.carsInQueue() > 10) {
-			queue.removeCar();
-		}
+        datum.setText(timeString);
+
     }
-    
-    public void makePassPlaces(int numberOfSpots) {
-        numberOfPassPlaces = numberOfSpots;
 
-        int x = 0,
-            z = 0,
-            y = 0;
-
-        for (int i=0; i<numberOfSpots; i++) {
-            if (z == numberOfPlaces) {
-                if (x == numberOfRows - 1) {
-                    y++;
-                    x = 0;
-                    z = 0;
-                }else {
-                    x += 1;
-                    z = 0;
-                	}
-            	}
-            setPassHolderSpace(new Location(y, x, z), new PassPlace());
-            z++;
-        	}
-        }
-    
-        public boolean setPassHolderSpace(Location loc, PassPlace phs) {
-            if (!locationIsValid(loc))
-                return false;
-
-            Car oldCar = getCarAt(loc);
-            if(oldCar == null) {
-                cars[2][0][loc.getPlace()] = phs;
-                cars[2][1][loc.getPlace()] = phs;
-                cars[2][2][loc.getPlace()] = phs;
-                cars[2][3][loc.getPlace()] = phs;
-                phs.setLocation(loc);
-                return true;
-            }
-
-            return false;
-        }
-    
     private void handleEntrance(){
     	carsArriving();
     	carsEntering(entrancePassQueue);
-    	carsEntering(entranceCarQueue);  
+    	carsEntering(entranceCarQueue);  	
     }
     
     private void handleExit(){
@@ -328,38 +331,37 @@ public class Model extends AbstractModel implements Runnable{
     }
     
     private void carsArriving(){
-    	int numberOfCars = getNumberOfCars(weekDayArrivals, weekendArrivals);
-        addArrivingCars(numberOfCars, AD_HOC);
-        
-    	numberOfCars = getNumberOfCars(weekDayPassArrivals, weekendPassArrivals);
-        addArrivingCars(numberOfCars, PASS);
-        
-        numberOfCars = getNumberOfReserveCars();
+    	int numberOfCars=getNumberOfCars(weekDayArrivals, weekendArrivals);
+        addArrivingCars(numberOfCars, AD_HOC);    	
+    	numberOfCars=getNumberOfCars(weekDayPassArrivals, weekendPassArrivals);
+        addArrivingCars(numberOfCars, PASS);    	
+        numberOfCars = getNumberOfCars(weekResArrivals, weekendResArrivals);
         addArrivingCars(numberOfCars, RESERVE);
-    }
-    
-    private int getNumberOfReserveCars() {
-    	return numberOfReserve;
     }
 
     private void carsEntering(CarQueue queue){
-    	this.queue = queue;
         int i=0;
         // Remove car from the front of the queue and assign to a parking space.
     	while (queue.carsInQueue()>0 && 
-    			getNumberOfOpenSpots()>0 &&
-    			getNumberOfOpenPassPlaces()>0 &&
+    			getNumberOfOpenSpots()>0 && 
     			i<enterSpeed) {
             Car car = queue.removeCar();
-            if(queue == entrancePassQueue){
-            	Location freePassLocation = getFirstPassLocation();
-            	setCarAt(freePassLocation, car);
-            	i++;
-            }else{
+            
+            if(car instanceof ParkingPassCar) {
+            	 Location freePassLocation = getFirstFreePassLocation();
+                 setCarAt(freePassLocation, car);
+                 countPass++;                 
+            }else if(car instanceof ReservedCar){
+            	 Location freeLocation = getFirstFreeResLocation();
+                 setCarAt(freeLocation, car);
+                 countRes++;
+            }else if(car instanceof AdHocCar) {
             	Location freeLocation = getFirstFreeLocation();
-            	setCarAt(freeLocation, car);
-            	i++;
+                setCarAt(freeLocation, car);
+                countCar++;
             }
+           
+            i++;
         }
     }
     
@@ -373,7 +375,6 @@ public class Model extends AbstractModel implements Runnable{
         	}
         	else {
         		carLeavesSpot(car);
-        		remakePassLocation();
         	}
             car = getFirstLeavingCar();
         }
@@ -384,10 +385,17 @@ public class Model extends AbstractModel implements Runnable{
     	int i=0;
     	while (paymentCarQueue.carsInQueue()>0 && i < paymentSpeed){
             Car car = paymentCarQueue.removeCar();
-            opbrengst += ticketPrijs;
-            System.out.println(opbrengst);
-    		totalOpbrengst.setText("Totale opbrengst: "+String.valueOf(opbrengst));
-
+            if(car instanceof ParkingPassCar) {
+           	                
+           }else if(car instanceof ReservedCar){
+        	   totaalOmzet += gemTicketPrijs;
+        	   totaalOmzet += fee;
+        	   reserveerIntOmzet++;
+           	 
+           }else if(car instanceof AdHocCar) {
+        	   totaalOmzet += gemTicketPrijs;
+        	   normaalIntOmzet++;
+           }
             carLeavesSpot(car);
             i++;
     	}
@@ -428,18 +436,18 @@ public class Model extends AbstractModel implements Runnable{
             for (int i = 0; i < numberOfCars; i++) {
             	entrancePassQueue.addCar(new ParkingPassCar());
             }
-            break;
+            break;	    
     	case RESERVE:
-    		for (int i = 0; i <numberOfCars; i++) {
-    			entranceCarQueue.addCar(new ReservedCar());
-    		}
+            for (int i = 0; i < numberOfCars; i++) {
+            	entranceCarQueue.addCar(new ReservedCar());
+            }
+            break;	  
     	}
     }
     
-    
     private void carLeavesSpot(Car car){
-		removeCarAt(car.getLocation());
-		exitCarQueue.addCar(car);
+    	removeCarAt(car.getLocation());
+        exitCarQueue.addCar(car);
     }
     
     public Car getCarAt(Location location) {
@@ -457,12 +465,7 @@ public class Model extends AbstractModel implements Runnable{
         if (oldCar == null) {
             cars[location.getFloor()][location.getRow()][location.getPlace()] = car;
             car.setLocation(location);
-            if(car.getHasToPay()==false){
-            	numberOfOpenPassPlaces--;
-//            	numberOfOpenSpots--;
-            }else{
-            	numberOfOpenSpots--;
-            }
+            numberOfOpenSpots--;
             return true;
         }
         return false;
@@ -478,12 +481,16 @@ public class Model extends AbstractModel implements Runnable{
         }
         cars[location.getFloor()][location.getRow()][location.getPlace()] = null;
         car.setLocation(null);
-        if(car.getHasToPay() == true){
-        	numberOfOpenSpots++;
-        }else{
-        	numberOfOpenPassPlaces++;
-//        	numberOfOpenSpots++;
+        
+        if(car instanceof ParkingPassCar) {
+        	countPass--;
+        }else if(car instanceof ReservedCar) {
+        	countRes--;
+        }else if(car instanceof AdHocCar){
+        	countCar--;
         }
+        
+        numberOfOpenSpots++;
         return car;
     }
 
@@ -501,36 +508,36 @@ public class Model extends AbstractModel implements Runnable{
         return null;
     }
     
-    public Location getFirstPassLocation() {
-        for (int floor = 0; floor < getNumberOfFloors(); floor++) {
-            for (int row = 0; row < getNumberOfRows(); row++) {
+    public Location getFirstFreePassLocation() {
+        for (int floor = 2; floor < getNumberOfFloors(); floor--) {
+            for (int row = 5; row < getNumberOfRows(); row--) {
                 for (int place = 0; place < getNumberOfPlaces(); place++) {
                     Location location = new Location(floor, row, place);
-                    if(getCarAt(location) != null) {
-                        if(getCarAt(location).getColor() == PassPlace.COLOR) {
-                            removeCarAt(location);
-                            return location;
-                        }
+                    if (getCarAt(location) == null) {
+                        return location;
                     }
                 }
             }
         }
-        return null;
+    	
+		return null;
+    	
     }
-
-    public void remakePassLocation() {
-        for (int floor = 2; floor < getNumberOfFloors(); floor++) {
-            for (int row = 0; row < getNumberOfRows() && row < 4; row++) {
+    
+    public Location getFirstFreeResLocation() {
+        for (int floor = 2; floor < getNumberOfFloors(); floor--) {
+            for (int row = 1; row < getNumberOfRows(); row--) {
                 for (int place = 0; place < getNumberOfPlaces(); place++) {
                     Location location = new Location(floor, row, place);
-                    if(getCarAt(location) == null) {
-                        setPassHolderSpace(location, new PassPlace());
-                        }
+                    if (getCarAt(location) == null) {
+                        return location;
                     }
                 }
             }
+        }
+		return null;
     }
-    
+
     public Car getFirstLeavingCar() {
         for (int floor = 0; floor < getNumberOfFloors(); floor++) {
             for (int row = 0; row < getNumberOfRows(); row++) {

@@ -1,26 +1,33 @@
 package view;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Image;
+import java.awt.SystemColor;
 
 import logic.Model;
 
 public class PieView extends AbstractView{
-	
+
 	public PieView(Model model) {
 		super(model);
 		setSize(200,200);
 	}
 	
 	public void paintComponent(Graphics g) {
-		int aantal=getModel().getNumberOfOpenSpots();
+		int normaal = getModel().getCountCar();
+		int pass = getModel().getCountPass();
+		int reserveer = getModel().getCountRes();
 				
-		g.setColor(Color.WHITE);
+		g.setColor(SystemColor.menu);
 		g.fillRect(0, 0, 200, 200);
+		g.setColor(Color.WHITE);
+		g.fillArc(0, 0, 180, 180, 360, 540);
+		g.setColor(Color.RED);
+		g.fillArc(0, 0, 180, 180, 360, normaal);
 		g.setColor(Color.BLUE);
-		g.fillArc(10, 10, 180, 180, 360, aantal);
+		g.fillArc(0, 0, 180, 180, 360, pass);
+		g.setColor(Color.YELLOW);
+		g.fillArc(0, 0, 180, 180, 360, reserveer);
 		
 		
 	}

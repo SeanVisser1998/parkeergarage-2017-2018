@@ -1,47 +1,49 @@
 package view;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.GridLayout;
+
+import javax.swing.JLabel;
 
 import logic.Model;
 
-@SuppressWarnings("serial")
-public class SideBar extends AbstractView {
-	JLabel openSpots;
-	JLabel timeText;
-	JLabel totalOpbrengst;
+public class SideBar extends AbstractView{
 	
-	String spots;
-		
+	JLabel normalCar;
+	JLabel resCar;
+	JLabel passCar;
+	JLabel totalCar;
+	
 	public SideBar(Model model) {
 		super(model);
-		spots = String.valueOf(model.getNumberOfOpenSpots());	
-		
-		//new JLabel(); -> NODIG ANDERS NULLPOINTEREXCEPTION
-		openSpots = new JLabel();
-		model.openSpots = openSpots;
 	
+		normalCar = new JLabel();
+		model.normalCar = normalCar;
+		normalCar.setText("Aantal normale auto's: " + model.getCountCar());
 		
-		//new JLabel(); -> NODIG ANDERS NULLPOINTEREXCEPTION
-		timeText = new JLabel();
-		model.timeText = timeText;
+		resCar = new JLabel();
+		model.resCar = resCar;
+		resCar.setText("Aantal gereserveerde auto's: " + model.getCountRes());
 		
-		totalOpbrengst = new JLabel();
-		model.totalOpbrengst = totalOpbrengst;
+		passCar = new JLabel();
+		model.passCar = passCar;
+		passCar.setText("Aantal pas auto's: " + model.getCountPass());
 		
-		openSpots.setText("Open spots:");
-		timeText.setText("Datum");
-        totalOpbrengst.setText("Totale opbrengst: 0");
+		totalCar = new JLabel();
+		model.totalCar = totalCar;
+		totalCar.setText("Totaal aantal auto's: " + model.getCountTotalCar());
+		
+		setupSideBar();
+	}
+	
+	private void setupSideBar() {
+		setLayout(new GridLayout(4,0));
+	
+		add(normalCar);
+		add(resCar);
+		add(passCar);
+		add(totalCar);
+	}
 
-		setUpSideBar();
-	}
-	
-	private void setUpSideBar() {
-		setLayout(new GridLayout(6,0));
-		
-		//Voeg JLabels toe aan sidebar
-		add(openSpots);
-		add(timeText);
-		add(totalOpbrengst);
-	}
+
+
 }
