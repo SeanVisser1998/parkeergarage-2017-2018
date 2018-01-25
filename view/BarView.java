@@ -35,10 +35,19 @@ public class BarView extends AbstractView{
 		g.fillRect(0, 0, 200, 200);
 		
 		//Normaal
-		g.setColor(Color.RED);
-		g.fillRect(25, 256-sizeNormaal, 35, sizeNormaal);
-		g.setColor(Color.DARK_GRAY);
-		g.drawString("" + model.getCountCar(), 35, 253-sizeNormaal);
+		if(sizeNormaal < 240) {
+			g.setColor(Color.RED);
+			g.fillRect(25, 256-sizeNormaal, 35, sizeNormaal);
+			g.setColor(Color.DARK_GRAY);
+			g.drawString("" + model.getCountCar(), 35, 253-sizeNormaal);
+		}
+		else {
+			g.setColor(Color.RED);
+			g.fillRect(25, 16, 35, 240);
+			g.setColor(Color.DARK_GRAY);
+			g.drawString("" + model.getCountCar(), 35, 13);
+		}
+		
 		
 		//Pas
 		g.setColor(Color.BLUE);

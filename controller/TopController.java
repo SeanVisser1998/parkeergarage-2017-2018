@@ -18,7 +18,7 @@ public class TopController extends AbstractController{
 
 		datum = new JLabel();
 		model.datum = datum;
-		datum.setText("Datum");
+		model.setTimeText();
 		datum.setFont(new Font("Tahoma", Font.BOLD, 22));
 		
 		

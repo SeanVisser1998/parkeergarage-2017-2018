@@ -165,6 +165,7 @@ public class Model extends AbstractModel implements Runnable{
 	public void reset() {
 		/*
 		 * Alleen het legen van CarParkView moet nog gedaan worden :)
+		 * 
 		 */
 		stop();
 		for(int floor = 0; floor < getNumberOfFloors(); floor++) {
@@ -177,9 +178,7 @@ public class Model extends AbstractModel implements Runnable{
 	                }
 	            }
 		}
-		
-//		System.out.println("CarParkView moet nog geleegd worden :)");
-		
+				
         this.countCar = 0;
         this.countPass = 0;
         this.countRes = 0;
@@ -191,9 +190,16 @@ public class Model extends AbstractModel implements Runnable{
         this.normaalIntOmzet = 0;
         this.reserveerIntOmzet = 0;
         this.elecIntOmzet = 0;
+
+        calendar = Calendar.getInstance();
+
         
-        notifyViews();
-        tick();
+        //niet tick(); gebruiken want dan gaat de tijd 1 minuut vooruit als je
+        //op de reset knop klikt.
+    	notifyViews();
+    	
+    	timeHandling();
+    	handleJLabel();
                 
 	}
 	
@@ -352,6 +358,11 @@ public class Model extends AbstractModel implements Runnable{
     	}
     	
     	
+    	setTimeText();
+
+    }
+    
+    public void setTimeText() {
     	 // Get weekday name
         DateFormatSymbols dfs = new DateFormatSymbols();
         dayString =  dfs.getWeekdays()[day];
@@ -365,7 +376,6 @@ public class Model extends AbstractModel implements Runnable{
         
         String timeString = dayString + "  " + time;
         datum.setText(timeString);
-
     }
 
     private void handleEntrance(){

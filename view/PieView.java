@@ -23,15 +23,15 @@ public class PieView extends AbstractView{
 		g.setColor(SystemColor.menu);
 		g.fillRect(0, 0, 200, 200);
 		g.setColor(Color.WHITE);
-		g.fillArc(0, 0, 180, 180, 360, 540);
+		g.fillArc(10, 10, 180, 180, 360, 540);
 		g.setColor(Color.RED);
-		g.fillArc(0, 0, 180, 180, 360, normaal);
+		g.fillArc(10, 10, 180, 180, 360, normaal);
 		g.setColor(Color.BLUE);
-		g.fillArc(0, 0, 180, 180, 360, pass);
+		g.fillArc(10, 10, 180, 180, 360, pass);
 		g.setColor(Color.YELLOW);
-		g.fillArc(0, 0, 180, 180, 360, reserveer);
+		g.fillArc(10, 10, 180, 180, 360, reserveer);
 		g.setColor(Color.CYAN);
-		g.fillArc(0, 0, 180, 180, 360, electric);
+		g.fillArc(10, 10, 180, 180, 360, electric);
 		
 		
 	}
