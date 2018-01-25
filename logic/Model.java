@@ -204,7 +204,7 @@ public class Model extends AbstractModel implements Runnable{
         //niet tick(); gebruiken want dan gaat de tijd 1 minuut vooruit als je
         //op de reset knop klikt.
     	notifyViews();
-    	
+    	emptyQueues();
     	timeHandling();
     	handleJLabel();
                 
@@ -212,6 +212,14 @@ public class Model extends AbstractModel implements Runnable{
 	
 	public void sliderChanged(int sliderValue) {
 		timeScale = sliderValue;
+	}
+	
+	public void emptyQueues() {
+
+		entranceCarQueue.emptyQueue();
+	    entrancePassQueue.emptyQueue();
+	    paymentCarQueue.emptyQueue();
+	    exitCarQueue.emptyQueue();
 	}
 	
 	public void close() {
