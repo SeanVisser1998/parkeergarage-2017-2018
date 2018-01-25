@@ -170,14 +170,15 @@ public class Model extends AbstractModel implements Runnable{
 		for(int floor = 0; floor < getNumberOfFloors(); floor++) {
 			  for(int row = 0; row < getNumberOfRows(); row++) {
 				  for(int place = 0; place < getNumberOfPlaces(); place++) {
-					  
-
+					  Location location = new Location(floor, row, place);
+	                  removeCarAt(location);
+	                  
 	                	
 	                }
 	            }
 		}
-				
-		  System.out.println("CarParkView moet nog geleegd worden :)");
+		
+//		System.out.println("CarParkView moet nog geleegd worden :)");
 		
         this.countCar = 0;
         this.countPass = 0;
