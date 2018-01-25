@@ -1,5 +1,6 @@
 package controller;
 
+import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -26,15 +27,19 @@ public class Controller extends AbstractController implements ActionListener{
 		
 		startButton = new JButton("Start");
 		startButton.addActionListener(this);
+		startButton.setBackground(Color.WHITE);
 		
 		stopButton = new JButton("Stop");
 		stopButton.addActionListener(this);
+		stopButton.setBackground(Color.white);
 		
 		resetButton = new JButton("Reset");
 		resetButton.addActionListener(this);
-		
+		resetButton.setBackground(Color.white);
+	
 		closeButton = new JButton("Close");
 		closeButton.addActionListener(this);
+		closeButton.setBackground(Color.white);
 		
 		timeScale = new JSlider(JSlider.HORIZONTAL, 25, 200, 100);
 		

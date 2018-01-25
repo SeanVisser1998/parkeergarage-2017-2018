@@ -18,6 +18,7 @@ public class PieView extends AbstractView{
 		int normaal = getModel().getCountCar();
 		int pass = getModel().getCountPass();
 		int reserveer = getModel().getCountRes();
+		int electric = getModel().getCountElec();
 				
 		g.setColor(SystemColor.menu);
 		g.fillRect(0, 0, 200, 200);
@@ -29,6 +30,8 @@ public class PieView extends AbstractView{
 		g.fillArc(0, 0, 180, 180, 360, pass);
 		g.setColor(Color.YELLOW);
 		g.fillArc(0, 0, 180, 180, 360, reserveer);
+		g.setColor(Color.CYAN);
+		g.fillArc(0, 0, 180, 180, 360, electric);
 		
 		
 	}

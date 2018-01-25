@@ -15,10 +15,12 @@ public class Model extends AbstractModel implements Runnable{
 	public JLabel normalCar;
 	public JLabel resCar;
 	public JLabel passCar;
+	public JLabel elecCar;
 	public JLabel totalCar;
 	
 	public JLabel omzet;
 	public JLabel normaalOmzet;
+	public JLabel elecOmzet;
 	public JLabel reserveerOmzet;
 	
 	public JLabel datum;
@@ -26,16 +28,19 @@ public class Model extends AbstractModel implements Runnable{
 	private static final String AD_HOC = "1";
 	private static final String PASS = "2";
 	private static final String RESERVE = "3";
+	private static final String ELECTRIC = "4";
 	
 	private int countCar;
 	private int countPass;
 	private int countRes;
+	private int countElec;
 	
 	private int gemTicketPrijs;
 	private int fee;
 	private int totaalOmzet;
 	private int normaalIntOmzet;
 	private int reserveerIntOmzet;
+	private int elecIntOmzet;
 	
 	private CarQueue entranceCarQueue;
     private CarQueue entrancePassQueue;
@@ -67,6 +72,9 @@ public class Model extends AbstractModel implements Runnable{
     
     int weekResArrivals = 30;
     int weekendResArrivals = 20;
+    
+    int weekElecArrivals = 10;
+    int weekendElecArrivals = 20;
 
     int enterSpeed = 3; // number of cars that can enter per minute
     int paymentSpeed = 7; // number of cars that can pay per minute
@@ -87,12 +95,14 @@ public class Model extends AbstractModel implements Runnable{
         this.countCar = 0;
         this.countPass = 0;
         this.countRes = 0;
+        this.countElec = 0;
         
         this.gemTicketPrijs = 10;
         this.fee = 2;
         this.totaalOmzet = 0;
         this.normaalIntOmzet = 0;
         this.reserveerIntOmzet = 0;
+        this.elecIntOmzet = 0;
         
         calendar = Calendar.getInstance();
        
@@ -118,12 +128,16 @@ public class Model extends AbstractModel implements Runnable{
 		return countPass;
 	}
 	
+	public int getCountElec() {
+		return countElec;
+	}
+	
 	public int getCountRes() {
 		return countRes;
 	}
 	
 	public int getCountTotalCar() {
-		return countCar+countPass+countRes;
+		return countCar+countPass+countRes+countElec;
 	}
 	
 	
@@ -137,6 +151,10 @@ public class Model extends AbstractModel implements Runnable{
 	
 	public int getReserveerOmzet() {
 		return reserveerIntOmzet * gemTicketPrijs + reserveerIntOmzet * fee;
+	}
+	
+	public int getElecOmzet() {
+		return elecIntOmzet * gemTicketPrijs;
 	}
 	
 	public int getTotaalOmzet() {
@@ -164,15 +182,17 @@ public class Model extends AbstractModel implements Runnable{
         this.countCar = 0;
         this.countPass = 0;
         this.countRes = 0;
+        this.countElec = 0;
         
         this.gemTicketPrijs = 10;
         this.fee = 2;
         this.totaalOmzet = 0;
         this.normaalIntOmzet = 0;
         this.reserveerIntOmzet = 0;
+        this.elecIntOmzet = 0;
         
+        notifyViews();
         tick();
-          
                 
 	}
 	
@@ -248,10 +268,12 @@ public class Model extends AbstractModel implements Runnable{
     	resCar.setText("Aantal gereserveerde auto's: " + getCountRes());
     	passCar.setText("Aantal auto's met een pas: " + getCountPass());
     	totalCar.setText("Totaal aantal auto's: " + getCountTotalCar());
+    	elecCar.setText("Aantal electrische auto's: " + getCountElec());
     	
     	omzet.setText("Totale omzet: €" + getTotaalOmzet());;
     	normaalOmzet.setText("Omzet normale auto's: €" + getNormaalOmzet());;
-    	reserveerOmzet.setText("Omzet gereserveerde auto's: €" + getReserveerOmzet());    	
+    	reserveerOmzet.setText("Omzet gereserveerde auto's: €" + getReserveerOmzet());    
+    	elecOmzet.setText("Omzet electrische auto's: €" + getElecOmzet());
     	
     }
 
@@ -283,6 +305,9 @@ public class Model extends AbstractModel implements Runnable{
     		
     		weekResArrivals = 30;
     		weekendResArrivals = 20;
+    		
+    	    weekElecArrivals = 10;
+    	    weekendElecArrivals = 20;
     	}
     	else {
     		weekDayArrivals = 20;
@@ -293,6 +318,9 @@ public class Model extends AbstractModel implements Runnable{
     		
     		weekendArrivals = 20;
     		weekendPassArrivals = 15;
+    		
+    	    weekElecArrivals = 5;
+    	    weekendElecArrivals = 15;
     	}
     	
     	if(day == 5 && hour >= 18 && hour < 23|| day == 6 && hour >= 18 && hour < 23 || day == 7 && hour >= 18 && hour < 23 || day == 0 && hour > 13 && hour < 18) {
@@ -304,6 +332,9 @@ public class Model extends AbstractModel implements Runnable{
     		
     		weekendArrivals = 350;
     		weekendPassArrivals = 20;
+    		
+    		weekElecArrivals = 10;
+    	    weekendElecArrivals = 10;
     	}
     	else if(day == 5 && hour >= 23 || day == 6 && hour >= 23 || day == 7 && hour >= 23) {
     		weekDayArrivals = 20;
@@ -314,6 +345,9 @@ public class Model extends AbstractModel implements Runnable{
     		
     		weekendArrivals = 20;
     		weekendPassArrivals = 10;
+    		
+    		weekElecArrivals = 10;
+    	    weekendElecArrivals = 20;
     	}
     	
     	
@@ -352,6 +386,8 @@ public class Model extends AbstractModel implements Runnable{
         addArrivingCars(numberOfCars, PASS);    	
         numberOfCars = getNumberOfCars(weekResArrivals, weekendResArrivals);
         addArrivingCars(numberOfCars, RESERVE);
+        numberOfCars = getNumberOfCars(weekElecArrivals, weekendElecArrivals);
+        addArrivingCars(numberOfCars, ELECTRIC);
     }
 
     private void carsEntering(CarQueue queue){
@@ -374,6 +410,11 @@ public class Model extends AbstractModel implements Runnable{
             	Location freeLocation = getFirstFreeLocation();
                 setCarAt(freeLocation, car);
                 countCar++;
+            }
+            else if(car instanceof ElecCar) {
+            	Location freeLocation = getFirstFreeLocation();
+                setCarAt(freeLocation, car);
+                countElec++;
             }
            
             i++;
@@ -410,6 +451,10 @@ public class Model extends AbstractModel implements Runnable{
            }else if(car instanceof AdHocCar) {
         	   totaalOmzet += gemTicketPrijs;
         	   normaalIntOmzet++;
+           }
+           else if(car instanceof ElecCar) {
+        	   totaalOmzet += gemTicketPrijs;
+        	   elecIntOmzet++;
            }
             carLeavesSpot(car);
             i++;
@@ -458,6 +503,12 @@ public class Model extends AbstractModel implements Runnable{
             	entranceCarQueue.addCar(new ReservedCar());
             }
             break;	  
+    	case ELECTRIC:
+            for (int i = 0; i < numberOfCars; i++) {
+            	entranceCarQueue.addCar(new ElecCar());
+            }
+            break;	
+        
     	}
     }
     
@@ -504,6 +555,8 @@ public class Model extends AbstractModel implements Runnable{
         	countRes--;
         }else if(car instanceof AdHocCar){
         	countCar--;
+        }else if(car instanceof ElecCar) {
+        	countElec--;
         }
         
         numberOfOpenSpots++;

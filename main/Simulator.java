@@ -6,6 +6,7 @@ import controller.Controller;
 import controller.TopController;
 import logic.Model;
 import view.AbstractView;
+import view.BarView;
 import view.CarParkView;
 import view.Legenda;
 import view.Namen;
@@ -36,6 +37,7 @@ public class Simulator{
 	private AbstractView profits;
 	private AbstractView legenda;
 	private AbstractView namen;
+	private AbstractView barView;
 	private TopController topController;
 	private Controller controller;
 	private JLabel lblNewLabel_3;
@@ -63,6 +65,11 @@ public class Simulator{
 		pieView.setBorder(new LineBorder(new Color(0, 0, 0)));
 		pieView.setLocation(10, 80);
 		
+		barView = new BarView(model);
+		barView.setSize(200, 262);
+		barView.setBorder(new LineBorder(new Color(0, 0, 0)));
+		barView.setLocation(10, 291);
+		
 		namen = new Namen(model);
 		namen.setBorder(new LineBorder(new Color(0, 0, 0)));
 		namen.setBounds(1099, 428, 215, 125);
@@ -88,6 +95,7 @@ public class Simulator{
 		
 		screen.getContentPane().add(carParkView);
 		screen.getContentPane().add(pieView);
+		screen.getContentPane().add(barView);
 		screen.getContentPane().add(controller);
 		screen.getContentPane().add(sideBar);
 		screen.getContentPane().add(topController);

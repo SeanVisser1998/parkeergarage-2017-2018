@@ -13,6 +13,7 @@ public class Legenda extends AbstractView {
 	
 	JLabel rood;
 	JLabel blauw;
+	JLabel cyan;
 	JLabel geel;
 
 	public Legenda(Model model) {
@@ -33,11 +34,17 @@ public class Legenda extends AbstractView {
 		geel.setFont(new Font("Tahoma", Font.BOLD, 12));
 		geel.setForeground(Color.YELLOW);
 		
-		setLayout(new GridLayout(3,0));
+		cyan = new JLabel();
+		cyan.setText("Electrische Auto");
+		cyan.setFont(new Font("Tahoma", Font.BOLD, 12));
+		cyan.setForeground(Color.CYAN);
+		
+		setLayout(new GridLayout(4,0));
 		setBackground(Color.LIGHT_GRAY);
 		
 		add(rood);
 		add(blauw);
+		add(cyan);
 		add(geel);
 		
 	}

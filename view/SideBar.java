@@ -13,6 +13,7 @@ public class SideBar extends AbstractView{
 	JLabel resCar;
 	JLabel passCar;
 	JLabel totalCar;
+	JLabel elecCar;
 	
 	public SideBar(Model model) {
 		super(model);
@@ -20,6 +21,10 @@ public class SideBar extends AbstractView{
 		normalCar = new JLabel();
 		model.normalCar = normalCar;
 		normalCar.setText("Aantal normale auto's: " + model.getCountCar());
+		
+		elecCar = new JLabel();
+		model.elecCar = elecCar;
+		elecCar.setText("Aantal electrische auto's: " + model.getCountElec());
 		
 		resCar = new JLabel();
 		model.resCar = resCar;
@@ -37,11 +42,12 @@ public class SideBar extends AbstractView{
 	}
 	
 	private void setupSideBar() {
-		setLayout(new GridLayout(4,0));
+		setLayout(new GridLayout(5,0));
 	
 		add(normalCar);
 		add(resCar);
 		add(passCar);
+		add(elecCar);
 		add(totalCar);
 	}
 
