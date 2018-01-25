@@ -6,11 +6,15 @@ import java.util.Calendar;
 import java.util.Random;
 
 import javax.swing.JLabel;
+import javax.swing.JMenuBar;
 import javax.swing.JOptionPane;
+import javax.swing.JPopupMenu;
 
 public class Model extends AbstractModel implements Runnable{
 	
 	public static boolean run;
+	
+	public JMenuBar menuBar;
 	
 	public JLabel normalCar;
 	public JLabel resCar;
@@ -53,7 +57,8 @@ public class Model extends AbstractModel implements Runnable{
     
     Calendar calendar;
     
-    private int day = 0;
+    private int dayPref = 2;
+    private int day = 2;
     private int hour = 0;
     private int minute = 0;
 
@@ -106,7 +111,7 @@ public class Model extends AbstractModel implements Runnable{
         
         calendar = Calendar.getInstance();
        
-        day = calendar.get(Calendar.DAY_OF_WEEK);
+//        day = calendar.get(Calendar.DAY_OF_WEEK);
         DateFormatSymbols dfs = new DateFormatSymbols();
         dayString = dfs.getWeekdays()[day];
         
@@ -160,6 +165,7 @@ public class Model extends AbstractModel implements Runnable{
 	public int getTotaalOmzet() {
 		return totaalOmzet;
 	}
+
 	
 	
 	public void reset() {
@@ -190,9 +196,10 @@ public class Model extends AbstractModel implements Runnable{
         this.normaalIntOmzet = 0;
         this.reserveerIntOmzet = 0;
         this.elecIntOmzet = 0;
-
-        calendar = Calendar.getInstance();
-
+        
+        day = dayPref;
+        hour = 0;
+        minute = 0;
         
         //niet tick(); gebruiken want dan gaat de tijd 1 minuut vooruit als je
         //op de reset knop klikt.
@@ -219,6 +226,28 @@ public class Model extends AbstractModel implements Runnable{
         }
 	}
 	
+	public void setDayPopUp() {
+		String[] options = new String[] {"Maandag","Dinsdag","Woensdag","Donderdag","Vrijdag","Zaterdag","Zondag"}; 
+		int option = JOptionPane.showOptionDialog(null,
+				"Kies de dag waarop je de simulatie wilt starten \n (De simulatie word gereset)",
+				"Dag kiezer",
+				JOptionPane.DEFAULT_OPTION,
+				JOptionPane.PLAIN_MESSAGE,
+				null, options, null);
+		if(option == -1) {
+			//als de gebruiker het venster sluit is option == -1
+			//dus dan niks doen
+		}
+		else {
+			//als option iets anders is dan -1 heeft de gebruiker een keuze gemaakt
+			//dagen zijn 1-indexed en beginnen bij zondag
+			//de array met dagen is 0-indexed en begint bij maandag
+			//dus 2 optellen bij de optie en je zit op de goede plek in de array
+			dayPref = (option+2);
+			System.out.println(day);
+			reset();
+		}
+	}
 	
 	public void run() {
 		run = true;

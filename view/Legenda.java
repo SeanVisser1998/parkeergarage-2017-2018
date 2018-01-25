@@ -14,41 +14,41 @@ import logic.ReservedCar;
 @SuppressWarnings("serial")
 public class Legenda extends AbstractView {
 	
-	JLabel rood;
-	JLabel blauw;
-	JLabel cyan;
-	JLabel geel;
+	JLabel normalCar;
+	JLabel passCar;
+	JLabel elecCar;
+	JLabel reservedCar;
 
 	public Legenda(Model model) {
 		super(model);
 		
-		rood = new JLabel();
-		rood.setText("Normale Auto");
-		rood.setFont(new Font("Tahoma", Font.BOLD, 12));
-		rood.setForeground(Color.RED);
+		normalCar = new JLabel();
+		normalCar.setText("Normale Auto");
+		normalCar.setFont(new Font("Tahoma", Font.BOLD, 12));
+		normalCar.setForeground(Color.RED);
 		
-		blauw = new JLabel();
-		blauw.setText("Pass Houder");
-		blauw.setFont(new Font("Tahoma", Font.BOLD, 12));
-		blauw.setForeground(ParkingPassCar.returnColor());
+		passCar = new JLabel();
+		passCar.setText("Pass Houder");
+		passCar.setFont(new Font("Tahoma", Font.BOLD, 12));
+		passCar.setForeground(ParkingPassCar.returnColor());
 		
-		geel = new JLabel();
-		geel.setText("Gereserveerde Auto");
-		geel.setFont(new Font("Tahoma", Font.BOLD, 12));
-		geel.setForeground(ReservedCar.returnColor());
+		reservedCar = new JLabel();
+		reservedCar.setText("Gereserveerde Auto");
+		reservedCar.setFont(new Font("Tahoma", Font.BOLD, 12));
+		reservedCar.setForeground(ReservedCar.returnTextColor());
 		
-		cyan = new JLabel();
-		cyan.setText("Electrische Auto");
-		cyan.setFont(new Font("Tahoma", Font.BOLD, 12));
-		cyan.setForeground(Color.decode("#009f2b"));
+		elecCar = new JLabel();
+		elecCar.setText("Electrische Auto");
+		elecCar.setFont(new Font("Tahoma", Font.BOLD, 12));
+		elecCar.setForeground(ElecCar.returnTextColor());
 		
 		setLayout(new GridLayout(4,0));
 		setBackground(Color.LIGHT_GRAY);
 		
-		add(rood);
-		add(blauw);
-		add(cyan);
-		add(geel);
+		add(normalCar);
+		add(passCar);
+		add(elecCar);
+		add(reservedCar);
 		
 	}
 

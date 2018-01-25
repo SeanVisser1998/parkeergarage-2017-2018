@@ -7,6 +7,7 @@ public class ReservedCar extends Car{
 	
 	//Kleur bepalen
 		private static final Color COLOR=Color.decode("#EAEA00");
+		private static final Color TEXTCOLOR = Color.decode("#f9f900");
 				
 		//Constructor
 		public ReservedCar(){
@@ -23,5 +24,9 @@ public class ReservedCar extends Car{
 		
 		public static Color returnColor() {
 			return COLOR;
+		}
+		
+		public static Color returnTextColor() {
+			return TEXTCOLOR;
 		}
 }

@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import javax.swing.JButton;
 import javax.swing.JSlider;
 
@@ -16,6 +17,7 @@ public class Controller extends AbstractController implements ActionListener{
 	JButton stopButton;
 	JButton resetButton;
 	JButton closeButton;
+	JButton setDayButton;
 	
 	JSlider timeScale;
 	
@@ -41,6 +43,10 @@ public class Controller extends AbstractController implements ActionListener{
 		closeButton.addActionListener(this);
 		closeButton.setBackground(Color.white);
 		
+		setDayButton = new JButton("Set day");
+		setDayButton.addActionListener(this);
+		setDayButton.setBackground(Color.WHITE);
+		
 		timeScale = new JSlider(JSlider.HORIZONTAL, 25, 200, 100);
 		
 		timeScale.addChangeListener(e -> sliderChanged() );
@@ -48,6 +54,7 @@ public class Controller extends AbstractController implements ActionListener{
 		timeScale.setMinorTickSpacing(5);
 		
 		this.setLayout(new FlowLayout());
+		add(setDayButton);
 		add(startButton);
 		add(stopButton);
 		add(resetButton);
@@ -88,7 +95,8 @@ public class Controller extends AbstractController implements ActionListener{
 			model.reset();
 		}
 		
-			
-		
+		else if(e.getSource() == setDayButton) {
+			model.setDayPopUp();
+		}
 	}
 }
