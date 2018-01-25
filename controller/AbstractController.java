@@ -3,6 +3,7 @@ package controller;
 import logic.Model;
 import javax.swing.JPanel;
 
+@SuppressWarnings("serial")
 public abstract class AbstractController extends JPanel{
 	
 	protected Model model;

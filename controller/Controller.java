@@ -8,6 +8,7 @@ import javax.swing.JSlider;
 
 import logic.Model;
 
+@SuppressWarnings("serial")
 public class Controller extends AbstractController implements ActionListener{
 
 	JButton startButton;
@@ -52,20 +53,12 @@ public class Controller extends AbstractController implements ActionListener{
 		//setVisible(true);
 	
 	}
-	
-	private void setUpPanel(){
-		
-		startButton.addActionListener(this);
-		stopButton.addActionListener(this);
-		startButton.setBounds(388, 47, 89, 23);
-		add(startButton);
-		add(stopButton);
-	}
 
 	public void sliderChanged()
 	{
 		model.sliderChanged(timeScale.getValue());
 	}
+	@SuppressWarnings("static-access")
 	@Override
 	public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == startButton) {

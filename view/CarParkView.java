@@ -2,7 +2,6 @@ package view;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Image;
 
@@ -10,6 +9,7 @@ import logic.Car;
 import logic.Location;
 import logic.Model;
 
+@SuppressWarnings("serial")
 public class CarParkView extends AbstractView{
 	
 	private Dimension size;
@@ -17,7 +17,7 @@ public class CarParkView extends AbstractView{
 
 	public CarParkView(Model model) {
 		super(model);
-		size = new Dimension(0, 0);
+		size = new Dimension(800, 500);
 	}
 	
     public Dimension getPreferredSize() {

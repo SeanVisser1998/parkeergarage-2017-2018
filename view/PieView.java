@@ -6,6 +6,7 @@ import java.awt.SystemColor;
 
 import logic.Model;
 
+@SuppressWarnings("serial")
 public class PieView extends AbstractView{
 
 	public PieView(Model model) {

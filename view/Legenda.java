@@ -8,6 +8,7 @@ import javax.swing.JLabel;
 
 import logic.Model;
 
+@SuppressWarnings("serial")
 public class Legenda extends AbstractView {
 	
 	JLabel rood;

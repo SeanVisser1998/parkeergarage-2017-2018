@@ -6,6 +6,7 @@ import javax.swing.JLabel;
 
 import logic.Model;
 
+@SuppressWarnings("serial")
 public class Profits extends AbstractView{
 	
 	JLabel omzet;

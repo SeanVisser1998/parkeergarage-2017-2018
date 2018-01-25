@@ -3,6 +3,7 @@ package view;
 import logic.Model;
 import javax.swing.JPanel;
  
+@SuppressWarnings("serial")
 public abstract class AbstractView extends JPanel {
 
 	protected Model model;

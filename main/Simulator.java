@@ -1,6 +1,5 @@
 package main;
 
-
 import javax.swing.JFrame;
 
 import controller.Controller;
@@ -14,14 +13,18 @@ import view.PieView;
 import view.Profits;
 import view.SideBar;
 
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.border.LineBorder;
 import java.awt.Color;
-import java.awt.Label;
 import java.awt.Toolkit;
 
+/**
+ * @author Bram Rustenhoven, Daan Aalders, Pyter vd Leij, Rutger Rozendal & Sean Visser
+ * @klas ITV1A
+ * @schooljaar 2017-2018
+ * @version 1.0.0 
+ */
 
 public class Simulator{
 
@@ -129,8 +132,6 @@ public class Simulator{
 		lblNewLabel_5.setForeground(Color.ORANGE);
 		lblNewLabel_5.setBounds(10, 12, 219, 38);
 		screen.getContentPane().add(lblNewLabel_5);
-		
-		
 		
 		screen.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		screen.setVisible(true);

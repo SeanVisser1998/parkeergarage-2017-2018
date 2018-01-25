@@ -107,9 +107,7 @@ public class Model extends AbstractModel implements Runnable{
         System.out.println(datumString);
         
         System.out.println(entranceCarQueue);
-        
-        
-        
+
 	}
 	
 	public int getCountCar() {
@@ -148,15 +146,32 @@ public class Model extends AbstractModel implements Runnable{
 	
 	public void reset() {
 		/*
-		 * moet nog gedaan worden :)
+		 * Alleen het legen van CarParkView moet nog gedaan worden :)
 		 */
+		stop();
 		for(int floor = 0; floor < getNumberOfFloors(); floor++) {
 			  for(int row = 0; row < getNumberOfRows(); row++) {
 				  for(int place = 0; place < getNumberOfPlaces(); place++) {
+					  
+
 	                	
 	                }
 	            }
 		}
+				
+		  System.out.println("CarParkView moet nog geleegd worden :)");
+		
+        this.countCar = 0;
+        this.countPass = 0;
+        this.countRes = 0;
+        
+        this.gemTicketPrijs = 10;
+        this.fee = 2;
+        this.totaalOmzet = 0;
+        this.normaalIntOmzet = 0;
+        this.reserveerIntOmzet = 0;
+        
+        tick();
           
                 
 	}
@@ -419,6 +434,7 @@ public class Model extends AbstractModel implements Runnable{
                 : weekend;
 
         // Calculate the number of cars that arrive this minute.
+        //Do you know da wae!? 
         double standardDeviation = averageNumberOfCarsPerHour * 0.3;
         double numberOfCarsPerHour = averageNumberOfCarsPerHour + random.nextGaussian() * standardDeviation;
         return (int)Math.round(numberOfCarsPerHour / 60);	

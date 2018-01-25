@@ -7,6 +7,7 @@ import javax.swing.JLabel;
 
 import logic.Model;
 
+@SuppressWarnings("serial")
 public class TopController extends AbstractController{
 	
 	JLabel datum;
