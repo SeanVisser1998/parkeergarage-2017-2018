@@ -4,7 +4,7 @@ import java.util.Random;
 import java.awt.*;
 
 public class ParkingPassCar extends Car {
-	private static final Color COLOR=Color.blue;
+	private static final Color COLOR=Color.decode("#0085FF");
 	
     public ParkingPassCar() {
     	Random random = new Random();
@@ -14,6 +14,10 @@ public class ParkingPassCar extends Car {
     }
     
     public Color getColor(){
+    	return COLOR;
+    }
+    
+    public static Color returnColor() {
     	return COLOR;
     }
 }

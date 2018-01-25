@@ -5,7 +5,7 @@ import java.util.Random;
 
 public class ElecCar extends Car{
 	
-	private static final Color COLOR=Color.CYAN;
+	private static final Color COLOR=Color.decode("#00DF3C");
 	
 	public ElecCar() {
     	Random random = new Random();
@@ -18,6 +18,9 @@ public class ElecCar extends Car{
 		return COLOR;
 	}
 	
+	public static Color returnColor() {
+		return COLOR;
+	}
 	
 
 }

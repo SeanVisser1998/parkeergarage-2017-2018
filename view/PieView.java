@@ -4,7 +4,10 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.SystemColor;
 
+import logic.ElecCar;
 import logic.Model;
+import logic.ParkingPassCar;
+import logic.ReservedCar;
 
 @SuppressWarnings("serial")
 public class PieView extends AbstractView{
@@ -26,11 +29,11 @@ public class PieView extends AbstractView{
 		g.fillArc(10, 10, 180, 180, 360, 540);
 		g.setColor(Color.RED);
 		g.fillArc(10, 10, 180, 180, 360, normaal);
-		g.setColor(Color.BLUE);
+		g.setColor(ParkingPassCar.returnColor());
 		g.fillArc(10, 10, 180, 180, 360, pass);
-		g.setColor(Color.YELLOW);
+		g.setColor(ReservedCar.returnColor());
 		g.fillArc(10, 10, 180, 180, 360, reserveer);
-		g.setColor(Color.CYAN);
+		g.setColor(ElecCar.returnColor());
 		g.fillArc(10, 10, 180, 180, 360, electric);
 		
 		

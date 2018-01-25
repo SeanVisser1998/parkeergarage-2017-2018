@@ -60,6 +60,17 @@ public class CarParkView extends AbstractView{
                     
                     
                     Color color = car == null ? Color.white : car.getColor();
+                    if(model.getCarAt(location) == null) { 
+                    	//als de plek een plek is voor abbonementhouders maak de plek lichtblauw
+                    	if(floor == 2 && row == 5 || floor == 2 && row == 4 || floor == 2 && row == 3 ||floor == 2 && row == 2) {
+	                    	
+	                    	color =  Color.decode("#B7EDFF");
+                    	}
+                    	//als de plek een plek is voor reserveringen maak de plek licht geel
+                    	if(floor == 2 && row == 0 || floor == 2 && row == 1) {
+                    		color = Color.decode("#FFFFDB");
+                    	}
+                    }
                     drawPlace(graphics, location, color);
                     
                 }

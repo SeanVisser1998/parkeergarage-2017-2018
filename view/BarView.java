@@ -5,7 +5,10 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.SystemColor;
 
+import logic.ElecCar;
 import logic.Model;
+import logic.ParkingPassCar;
+import logic.ReservedCar;
 
 public class BarView extends AbstractView{
 	
@@ -50,19 +53,19 @@ public class BarView extends AbstractView{
 		
 		
 		//Pas
-		g.setColor(Color.BLUE);
+		g.setColor(ParkingPassCar.returnColor());
 		g.fillRect(60, 256-sizePass, 35, sizePass);
 		g.setColor(Color.DARK_GRAY);
 		g.drawString("" + model.getCountPass(), 70, 253-sizePass);
 		
 		//Reserveer
-		g.setColor(Color.YELLOW);
+		g.setColor(ReservedCar.returnColor());
 		g.fillRect(95, 256-sizeRes, 35, sizeRes);
 		g.setColor(Color.DARK_GRAY);
-		g.drawString("" + model.getCountRes(), 105,253-sizeRes);
+		g.drawString("" + model.getCountRes(), 105, 253-sizeRes);
 		
 		//Electrisch
-		g.setColor(Color.CYAN);
+		g.setColor(ElecCar.returnColor());
 		g.fillRect(130, 256-sizeElec, 35,sizeElec);
 		g.setColor(Color.DARK_GRAY);
 		g.drawString("" + model.getCountElec(), 140, 253-sizeElec);

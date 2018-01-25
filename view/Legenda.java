@@ -6,7 +6,10 @@ import java.awt.GridLayout;
 
 import javax.swing.JLabel;
 
+import logic.ElecCar;
 import logic.Model;
+import logic.ParkingPassCar;
+import logic.ReservedCar;
 
 @SuppressWarnings("serial")
 public class Legenda extends AbstractView {
@@ -27,17 +30,17 @@ public class Legenda extends AbstractView {
 		blauw = new JLabel();
 		blauw.setText("Pass Houder");
 		blauw.setFont(new Font("Tahoma", Font.BOLD, 12));
-		blauw.setForeground(Color.BLUE);
+		blauw.setForeground(ParkingPassCar.returnColor());
 		
 		geel = new JLabel();
 		geel.setText("Gereserveerde Auto");
 		geel.setFont(new Font("Tahoma", Font.BOLD, 12));
-		geel.setForeground(Color.YELLOW);
+		geel.setForeground(ReservedCar.returnColor());
 		
 		cyan = new JLabel();
 		cyan.setText("Electrische Auto");
 		cyan.setFont(new Font("Tahoma", Font.BOLD, 12));
-		cyan.setForeground(Color.CYAN);
+		cyan.setForeground(Color.decode("#009f2b"));
 		
 		setLayout(new GridLayout(4,0));
 		setBackground(Color.LIGHT_GRAY);

@@ -647,7 +647,7 @@ public class Model extends AbstractModel implements Runnable{
 		}
  	}
 
-    private boolean locationIsValid(Location location) {
+    public boolean locationIsValid(Location location) {
         int floor = location.getFloor();
         int row = location.getRow();
         int place = location.getPlace();

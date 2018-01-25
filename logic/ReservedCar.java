@@ -6,7 +6,7 @@ import java.util.Random;
 public class ReservedCar extends Car{
 	
 	//Kleur bepalen
-		private static final Color COLOR=Color.yellow;
+		private static final Color COLOR=Color.decode("#EAEA00");
 				
 		//Constructor
 		public ReservedCar(){
@@ -18,6 +18,10 @@ public class ReservedCar extends Car{
 		
 		//Return color functie
 		public Color getColor() {
+			return COLOR;
+		}
+		
+		public static Color returnColor() {
 			return COLOR;
 		}
 }
