@@ -1,11 +1,13 @@
+/*
+ * LineGraph Class
+ * Wordt niet gebruikt en is puur voor overzicht
+
 package view;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.SystemColor;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -23,8 +25,10 @@ import logic.Model;
 import logic.ParkingPassCar;
 import logic.ReservedCar;
 
+//
+
 @SuppressWarnings("serial")
-public class BarView extends AbstractView{
+public class LineGraph extends AbstractView{
 	
 	LinkedList<Integer> dataNormal;
 	LinkedList<Integer> dataPass;
@@ -33,8 +37,13 @@ public class BarView extends AbstractView{
 	LinkedList<Integer> dataAll;
 	
 	int counter = 0;
+	int x_counter = 0;
 	
-	public BarView(Model model) {
+	int i;
+	int y1;
+	int y2;
+	
+	public LineGraph(Model model) {
 		super(model);
 
 	}
@@ -43,75 +52,20 @@ public class BarView extends AbstractView{
 		return new Dimension(200,262);
 	}
 	
-	private int getSize(int totaalAuto) {
-		int totaal = model.getNumberOfFloors() * model.getNumberOfRows() * model.getNumberOfPlaces();
-		double size = 1.0 * (double) totaalAuto;
-		return (int) size;
-	}
-	
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
+		g.setColor(Color.DARK_GRAY);
+		g.fillRect(0, 0, 200, 262);
 		
-		//BAR GRAPH--------------------------------------------
-		if(model.switchGraphs) {
-			int sizeNormaal = getSize(model.getCountCar());
-			int sizePass = getSize(model.getCountPass());
-			int sizeRes = getSize(model.getCountRes());
-			int sizeElec = getSize(model.getCountElec());
-			
-			g.setColor(SystemColor.menu);
-			g.fillRect(0, 0, 200, 200);
-			
-			//Normaal
-			if(sizeNormaal < 240) {
-				g.setColor(Color.RED);
-				g.fillRect(25, 256-sizeNormaal, 35, sizeNormaal);
-				g.setColor(Color.DARK_GRAY);
-				g.drawString("" + model.getCountCar(), 35, 253-sizeNormaal);
-			}
-			else {
-				g.setColor(Color.RED);
-				g.fillRect(25, 16, 35, 240);
-				g.setColor(Color.DARK_GRAY);
-				g.drawString("" + model.getCountCar(), 35, 13);
-			}
-			
-			
-			//Pas
-			g.setColor(ParkingPassCar.returnColor());
-			g.fillRect(60, 256-sizePass, 35, sizePass);
-			g.setColor(Color.DARK_GRAY);
-			g.drawString("" + model.getCountPass(), 70, 253-sizePass);
-			
-			//Reserveer
-			g.setColor(ReservedCar.returnColor());
-			g.fillRect(95, 256-sizeRes, 35, sizeRes);
-			g.setColor(Color.DARK_GRAY);
-			g.drawString("" + model.getCountRes(), 105, 253-sizeRes);
-			
-			//Electrisch
-			g.setColor(ElecCar.returnColor());
-			g.fillRect(130, 256-sizeElec, 35,sizeElec);
-			g.setColor(Color.DARK_GRAY);
-			g.drawString("" + model.getCountElec(), 140, 253-sizeElec);
-		}
+		updateLinkedLists();
 		
-		//LINE GRAPH----------------------------------
-		if(model.switchGraphs == false) {
-			g.setColor(Color.DARK_GRAY);
-			g.fillRect(0, 0, 200, 262);
-			
-			updateLinkedLists();
-			
-			g.setColor(Color.BLUE);
-			if(model.returnOldMinute() != model.returnMinute()) {
+		g.setColor(Color.BLUE);
+		if(model.returnOldMinute() != model.returnMinute()) {
 
-			drawGraph(g);
-			
-			}		
-		}
+		drawGraph(g);
+		}		
 	}
-	
+	//----------------------------------------
 	public void drawGraph(Graphics g){
 		counter ++;
 
@@ -140,6 +94,7 @@ public class BarView extends AbstractView{
 				//nieuwe bestand opslaan
 				save(image, filename);
 			} catch (Exception e) {
+				// TODO Auto-generated catch block
 				System.out.println("Er is iets mis gegaan! - "+e);
 			}
 			clearLinkedLists();
@@ -147,7 +102,7 @@ public class BarView extends AbstractView{
 	}
 	
 	private void drawLines(Graphics g) {
-		//verticale lines
+		//horizontal lines
 		for(int i = 262; i > 0; i-=10) {
 			int x1 = 0;
 			int x2 = 200;
@@ -159,10 +114,10 @@ public class BarView extends AbstractView{
 			g.drawLine(x1, y, x2, y);
 			
 			g.setColor(Color.GRAY);
-			g.drawLine(x1, y, 5, y);			
+			g.drawLine(x1, y, 5, y);
+			
 		}
 		
-		//horizontale lines
 		for(float i = 0; i < 200; i+=8.33333) {
 			
 			int y1 = 262;
@@ -176,25 +131,12 @@ public class BarView extends AbstractView{
 			g.setColor(Color.GRAY);
 			g.drawLine(x, y1, x, 257);
 		}
-		
-		//verticale nummers
-		Font f = new Font("Dialog", Font.PLAIN, 10);
-		g.setFont(f);
-		int num = 540;
-		for(int i = 0; i < 262; i+=10) {
-			
-			g.setColor(Color.GRAY);
-			g.drawString(String.valueOf(num), 7, i-4);
-			num -= 20;
-		}
-
 	}
 	
 	private void drawLineGraph(Graphics g, LinkedList<Integer> list, Color color) {
 		g.setColor(color);
-
 		if(list.size() > 1) {
-			for(int i = 1; i < list.size(); i++) {
+			for(i = 1; i < list.size(); i++) {
 				int stepSize = model.returnLineGraphStepSize();
 				
 				//hack groter = meer naar links
@@ -203,8 +145,8 @@ public class BarView extends AbstractView{
 				int x1 = ((i-1)	* 10) / (hack / stepSize);
 				int x2 = ((i)	* 10) / (hack / stepSize);
 				
-				int y1 = list.get(i-1)	  ;
-				int y2 = list.get(i	 ) + 1;
+				y1 = list.get(i-1)	  ;
+				y2 = list.get(i	 ) + 1;
 				
 				g.drawLine(x1, 262+(-y1/2), x2, 262+(-y2/2));
 			}
@@ -243,4 +185,95 @@ public class BarView extends AbstractView{
 	public void save(BufferedImage image, String filename) throws IOException{
         ImageIO.write(image, "PNG", new File(filename));
     }
+}
+*/
+
+
+/*
+ * BarView graph
+ * wordt niet gebruikt en is puur voor overzicht
+ *
+package view;
+
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.SystemColor;
+
+import logic.ElecCar;
+import logic.Model;
+import logic.ParkingPassCar;
+import logic.ReservedCar;
+
+public class BarView extends AbstractView{
+	
+	public BarView(Model model) {
+		super(model);
+
+	}
+	
+	public Dimension getPrefferedSize() {
+		return new Dimension(200,262);
+	}
+	
+	private int getSize(int totaalAuto) {
+		int totaal = model.getNumberOfFloors() * model.getNumberOfRows() * model.getNumberOfPlaces();
+		double size = 1.0 * (double) totaalAuto;
+		return (int) size;
+	}
+	
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		int sizeNormaal = getSize(model.getCountCar());
+		int sizePass = getSize(model.getCountPass());
+		int sizeRes = getSize(model.getCountRes());
+		int sizeElec = getSize(model.getCountElec());
+		
+		g.setColor(SystemColor.menu);
+		g.fillRect(0, 0, 200, 200);
+		
+		//Normaal
+		if(sizeNormaal < 240) {
+			g.setColor(Color.RED);
+			g.fillRect(25, 256-sizeNormaal, 35, sizeNormaal);
+			g.setColor(Color.DARK_GRAY);
+			g.drawString("" + model.getCountCar(), 35, 253-sizeNormaal);
+		}
+		else {
+			g.setColor(Color.RED);
+			g.fillRect(25, 16, 35, 240);
+			g.setColor(Color.DARK_GRAY);
+			g.drawString("" + model.getCountCar(), 35, 13);
+		}
+		
+		
+		//Pas
+		g.setColor(ParkingPassCar.returnColor());
+		g.fillRect(60, 256-sizePass, 35, sizePass);
+		g.setColor(Color.DARK_GRAY);
+		g.drawString("" + model.getCountPass(), 70, 253-sizePass);
+		
+		//Reserveer
+		g.setColor(ReservedCar.returnColor());
+		g.fillRect(95, 256-sizeRes, 35, sizeRes);
+		g.setColor(Color.DARK_GRAY);
+		g.drawString("" + model.getCountRes(), 105, 253-sizeRes);
+		
+		//Electrisch
+		g.setColor(ElecCar.returnColor());
+		g.fillRect(130, 256-sizeElec, 35,sizeElec);
+		g.setColor(Color.DARK_GRAY);
+		g.drawString("" + model.getCountElec(), 140, 253-sizeElec);
+		
+	}
+}
+*/
+package view;
+
+import logic.Model;
+
+public class LineGraph extends AbstractView {
+	public LineGraph(Model model){
+		super(model);
+	}
 }

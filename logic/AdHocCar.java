@@ -16,4 +16,8 @@ public class AdHocCar extends Car {
     public Color getColor(){
     	return COLOR;
     }
+    
+    public static Color returnColor() {
+    	return COLOR;
+    }
 }

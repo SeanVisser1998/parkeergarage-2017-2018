@@ -1,8 +1,10 @@
 package logic;
 
+import java.awt.Graphics;
 import java.text.DateFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.LinkedList;
 import java.util.Random;
 
 import javax.swing.JLabel;
@@ -10,11 +12,17 @@ import javax.swing.JMenuBar;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 
+import view.BarView;
+
 public class Model extends AbstractModel implements Runnable{
 	
 	public static boolean run;
 	
 	public JMenuBar menuBar;
+	
+	private int minuteOld = -1;
+	
+	public boolean switchGraphs = true;
 	
 	public JLabel normalCar;
 	public JLabel resCar;
@@ -27,6 +35,14 @@ public class Model extends AbstractModel implements Runnable{
 	public JLabel elecOmzet;
 	public JLabel reserveerOmzet;
 	
+	//line graph
+	public LinkedList<Integer> lineDataNormal;
+	public LinkedList<Integer> lineDataPass;
+	public LinkedList<Integer> lineDataReserved;
+	public LinkedList<Integer> lineDataElectric;
+	public LinkedList<Integer> lineDataAll;
+	public int lineGraphStepSize;
+	
 	public JLabel datum;
 	
 	private static final String AD_HOC = "1";
@@ -38,7 +54,7 @@ public class Model extends AbstractModel implements Runnable{
 	private int countPass;
 	private int countRes;
 	private int countElec;
-	
+		
 	private int gemTicketPrijs;
 	private int fee;
 	private int totaalOmzet;
@@ -109,6 +125,14 @@ public class Model extends AbstractModel implements Runnable{
         this.reserveerIntOmzet = 0;
         this.elecIntOmzet = 0;
         
+        //line graph
+        lineDataNormal = new LinkedList<Integer>();
+        lineDataPass = new LinkedList<Integer>();
+        lineDataReserved = new LinkedList<Integer>();
+        lineDataElectric = new LinkedList<Integer>();
+        lineDataAll = new LinkedList<Integer>();
+        lineGraphStepSize = 10;
+        
         calendar = Calendar.getInstance();
        
 //        day = calendar.get(Calendar.DAY_OF_WEEK);
@@ -123,6 +147,14 @@ public class Model extends AbstractModel implements Runnable{
         
         System.out.println(entranceCarQueue);
 
+	}
+	
+	public String returnDayString() {
+		if(dayString == ""){
+				DateFormatSymbols dfs = new DateFormatSymbols();
+				return dfs.getWeekdays()[Calendar.SATURDAY];
+		}
+		return dayString;
 	}
 	
 	public int getCountCar() {
@@ -165,8 +197,21 @@ public class Model extends AbstractModel implements Runnable{
 	public int getTotaalOmzet() {
 		return totaalOmzet;
 	}
-
 	
+	public boolean isRunning() {
+		return run;
+	}
+
+	public boolean switchGraphs() {
+		if(switchGraphs == true) {
+			switchGraphs = false;
+			return switchGraphs;
+		}
+		else {
+			switchGraphs = true;
+			return switchGraphs;
+		}
+	}
 	
 	public void reset() {
 		/*
@@ -246,6 +291,11 @@ public class Model extends AbstractModel implements Runnable{
 			//als de gebruiker het venster sluit is option == -1
 			//dus dan niks doen
 		}
+		if(option == 6) {
+			dayPref = 1;
+			System.out.println(day);
+			reset();
+		}
 		else {
 			//als option iets anders is dan -1 heeft de gebruiker een keuze gemaakt
 			//dagen zijn 1-indexed en beginnen bij zondag
@@ -320,10 +370,35 @@ public class Model extends AbstractModel implements Runnable{
     	elecOmzet.setText("Omzet electrische auto's: €" + getElecOmzet());
     	
     }
+    
+    public int returnOldMinute() {
+    	return minuteOld;
+    }
+    
+    private void lineGraph(int stepSize) {
+    	if(minute%stepSize == 0) {
+	        lineDataNormal.add(getCountCar());
+	        lineDataPass.add(getCountPass());
+	        lineDataReserved.add(getCountRes());
+	    	lineDataElectric.add(getCountElec());
+	    	int total = getCountCar() + getCountPass() + getCountRes() + getCountElec();
+	    	lineDataAll.add(total);
+        }
+    }
+    
+    public int returnLineGraphStepSize() {
+    	return lineGraphStepSize;
+    }
 
     private void advanceTime(){
-        // Advance the time by one minute.
+        // Advance the time by one minute.    	
+    	
         minute++;
+        
+        lineGraph(lineGraphStepSize);
+
+        //        System.out.println(lineDataNormal);
+        
         tickPause = timeScale;
         while (minute > 59) {
             minute -= 60;
@@ -336,7 +411,16 @@ public class Model extends AbstractModel implements Runnable{
         while (day > 6) {
             day -= 7;
         }
+        	
 
+    }
+    
+    public int returnMinute() {
+    	return minute;
+    }
+    
+    public int returnHour() {
+    	return hour;
     }
     
     private void timeHandling() {
@@ -350,7 +434,7 @@ public class Model extends AbstractModel implements Runnable{
     		weekResArrivals = 30;
     		weekendResArrivals = 20;
     		
-    	    weekElecArrivals = 10;
+    	    weekElecArrivals = 30;
     	    weekendElecArrivals = 20;
     	}
     	else {
@@ -393,10 +477,29 @@ public class Model extends AbstractModel implements Runnable{
     		weekElecArrivals = 10;
     	    weekendElecArrivals = 20;
     	}
-    	
-    	
+//    	
     	setTimeText();
 
+    }
+    
+    public LinkedList<Integer> getLineDataNormal() {
+    	return lineDataNormal;
+    }
+    
+    public LinkedList<Integer> getLineDataPass(){
+    	return lineDataPass;
+    }
+    
+    public LinkedList<Integer> getLineDataReserved(){
+    	return lineDataReserved;
+    }
+    
+    public LinkedList<Integer> getLineDataElectric(){
+    	return lineDataElectric;
+    }
+    
+    public LinkedList<Integer> getLineDataAll(){
+    	return lineDataAll;
     }
     
     public void setTimeText() {
@@ -464,7 +567,7 @@ public class Model extends AbstractModel implements Runnable{
                 setCarAt(freeLocation, car);
                 countElec++;
             }
-           
+
             i++;
         }
     }

@@ -18,6 +18,7 @@ public class Controller extends AbstractController implements ActionListener{
 	JButton resetButton;
 	JButton closeButton;
 	JButton setDayButton;
+	JButton switchGraphs;
 	
 	JSlider timeScale;
 	
@@ -47,6 +48,10 @@ public class Controller extends AbstractController implements ActionListener{
 		setDayButton.addActionListener(this);
 		setDayButton.setBackground(Color.WHITE);
 		
+		switchGraphs = new JButton("Switch graphs");
+		switchGraphs.addActionListener(this);
+		switchGraphs.setBackground(Color.WHITE);
+		
 		timeScale = new JSlider(JSlider.HORIZONTAL, 25, 200, 100);
 		
 		timeScale.addChangeListener(e -> sliderChanged() );
@@ -54,6 +59,7 @@ public class Controller extends AbstractController implements ActionListener{
 		timeScale.setMinorTickSpacing(5);
 		
 		this.setLayout(new FlowLayout());
+		add(switchGraphs);
 		add(setDayButton);
 		add(startButton);
 		add(stopButton);
@@ -97,6 +103,11 @@ public class Controller extends AbstractController implements ActionListener{
 		
 		else if(e.getSource() == setDayButton) {
 			model.setDayPopUp();
+		}
+			
+		else if(e.getSource() == switchGraphs) {
+			model.switchGraphs();
+			model.notifyViews();
 		}
 	}
 }
