@@ -9,6 +9,13 @@ Java opdracht voor OOP1, Hanzehogeschool 2017-2018
 - Rutger Rozendal
 - Sean Visser
 
+## Eclipse installatie
+
+  "Clone or dowload" > "Download as ZIP" > .ZIP bestand uitpakken;
+  Eclipse > New Project > "Parkeer Garage" > "src" > Rechter muisklik > "Import" > Selecteer de map met de uitgepakte bestanden;
+  Eclipse > Run Configurations > "Java Applications" > In "Main Class" zet je "runner.Runner" neer;
+  Done.
+
 ## Version
 
 ### Current version
