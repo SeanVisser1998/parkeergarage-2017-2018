@@ -1,20 +1,14 @@
 package logic;
 
-import java.awt.Graphics;
 import java.text.DateFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.Random;
-
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenuBar;
 import javax.swing.JOptionPane;
-import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
-
-import view.BarView;
 
 public class Model extends AbstractModel implements Runnable{
 	
@@ -106,9 +100,9 @@ public class Model extends AbstractModel implements Runnable{
     
     int setElecArrivals = 0;
 
-    int enterSpeed = 3; // number of cars that can enter per minute
+    int enterSpeed = 4; // number of cars that can enter per minute
     int paymentSpeed = 7; // number of cars that can pay per minute
-    int exitSpeed = 5; // number of cars that can leave per minute
+    int exitSpeed = 6; // number of cars that can leave per minute
 	
 	public Model(int numberOfFloors, int numberOfRows, int numberOfPlaces) {
 		run = false;
@@ -479,9 +473,10 @@ public class Model extends AbstractModel implements Runnable{
     	if(setArrivals == 0 && setElecArrivals == 0 && setPassArrivals == 0 && setResArrivals == 0) {
 	    	if(hour >= 7 && hour < 16) {
 	    		weekDayArrivals = 200;
-	    		weekDayPassArrivals = 50;
-	    		
 	    		weekendArrivals = 100;
+	    		
+	    		
+	    		weekDayPassArrivals = 50;
 	    		weekendPassArrivals = 55;
 	    		
 	    		weekResArrivals = 30;
@@ -605,25 +600,45 @@ public class Model extends AbstractModel implements Runnable{
     	while (queue.carsInQueue()>0 && 
     			getNumberOfOpenSpots()>0 && 
     			i<enterSpeed) {
-            Car car = queue.removeCar();
+            Car car = queue.peekCar();
             
             if(car instanceof ParkingPassCar) {
-            	 Location freePassLocation = getFirstFreePassLocation();
-                 setCarAt(freePassLocation, car);
-                 countPass++;                 
+            	 Location freeLocation = getFirstFreePassLocation();
+            	 
+            	 if(freeLocation != null) {
+            		 car = queue.removeCar();
+            		  setCarAt(freeLocation, car);
+                      countPass++;    
+            	 }
+            	 
             }else if(car instanceof ReservedCar){
             	 Location freeLocation = getFirstFreeResLocation();
-                 setCarAt(freeLocation, car);
-                 countRes++;
+            	 
+            	 if(freeLocation != null) {
+            		 car = queue.removeCar();
+            		 setCarAt(freeLocation, car);
+                     countRes++;
+            	 }
+            	 
             }else if(car instanceof AdHocCar) {
             	Location freeLocation = getFirstFreeLocation();
-                setCarAt(freeLocation, car);
-                countCar++;
+            	
+            	
+            	if(freeLocation != null) {
+        		 car = queue.removeCar();
+        		 setCarAt(freeLocation, car);
+        		 countCar++;
+            	}   
             }
             else if(car instanceof ElecCar) {
             	Location freeLocation = getFirstFreeLocation();
-                setCarAt(freeLocation, car);
-                countElec++;
+            	
+            	
+            	if(freeLocation != null) {
+        		 car = queue.removeCar();
+        		 setCarAt(freeLocation, car);
+        		 countElec++;
+            	} 
             }
 
             i++;
@@ -773,7 +788,7 @@ public class Model extends AbstractModel implements Runnable{
     }
 
     public Location getFirstFreeLocation() {
-        for (int floor = 0; floor < getNumberOfFloors(); floor++) {
+        for (int floor = 0; floor < getNumberOfFloors()-1; floor++) {
             for (int row = 0; row < getNumberOfRows(); row++) {
                 for (int place = 0; place < getNumberOfPlaces(); place++) {
                     Location location = new Location(floor, row, place);
@@ -787,7 +802,7 @@ public class Model extends AbstractModel implements Runnable{
     }
     
     public Location getFirstFreePassLocation() {
-        for (int floor = 2; floor < getNumberOfFloors(); floor--) {
+        for (int floor = 2; floor < getNumberOfFloors()+2; floor--) {
             for (int row = 5; row < getNumberOfRows(); row--) {
                 for (int place = 0; place < getNumberOfPlaces(); place++) {
                     Location location = new Location(floor, row, place);
@@ -803,7 +818,7 @@ public class Model extends AbstractModel implements Runnable{
     }
     
     public Location getFirstFreeResLocation() {
-        for (int floor = 2; floor < getNumberOfFloors(); floor--) {
+        for (int floor = 2; floor < getNumberOfFloors()+2; floor--) {
             for (int row = 1; row < getNumberOfRows(); row--) {
                 for (int place = 0; place < getNumberOfPlaces(); place++) {
                     Location location = new Location(floor, row, place);

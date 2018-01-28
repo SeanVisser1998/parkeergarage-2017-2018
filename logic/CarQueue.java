@@ -13,6 +13,10 @@ public class CarQueue {
     public Car removeCar() {
         return queue.poll();
     }
+    
+    public Car peekCar() {
+    	return queue.peek();
+    }
 
     public int carsInQueue(){
     	return queue.size();
