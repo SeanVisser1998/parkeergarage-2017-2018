@@ -815,7 +815,10 @@ public class Model extends AbstractModel implements Runnable{
             for (int row = 5; row < getNumberOfRows(); row--) {
                 for (int place = 0; place < getNumberOfPlaces(); place++) {
                     Location location = new Location(floor, row, place);
-                    if (getCarAt(location) == null) {
+                    if(getCountPass() == 120) {
+                    	return null;
+                    }
+                    else if (getCarAt(location) == null) {
                         return location;
                     }
                 }
@@ -831,7 +834,10 @@ public class Model extends AbstractModel implements Runnable{
             for (int row = 1; row < getNumberOfRows(); row--) {
                 for (int place = 0; place < getNumberOfPlaces(); place++) {
                     Location location = new Location(floor, row, place);
-                    if (getCarAt(location) == null) {
+                    if(getCountRes() == 60) {
+                    	return null;
+                    }
+                    else if (getCarAt(location) == null) {
                         return location;
                     }
                 }
