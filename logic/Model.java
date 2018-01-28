@@ -7,10 +7,12 @@ import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.Random;
 
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenuBar;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
+import javax.swing.JTextField;
 
 import view.BarView;
 
@@ -91,11 +93,18 @@ public class Model extends AbstractModel implements Runnable{
     int weekDayPassArrivals= 50; // average number of arriving cars per hour
     int weekendPassArrivals = 5; // average number of arriving cars per hour
     
+    int setArrivals = 0;
+    int setPassArrivals = 0;
+    
     int weekResArrivals = 30;
     int weekendResArrivals = 20;
     
+    int setResArrivals = 0;
+    
     int weekElecArrivals = 10;
     int weekendElecArrivals = 20;
+    
+    int setElecArrivals = 0;
 
     int enterSpeed = 3; // number of cars that can enter per minute
     int paymentSpeed = 7; // number of cars that can pay per minute
@@ -245,6 +254,10 @@ public class Model extends AbstractModel implements Runnable{
         day = dayPref;
         hour = 0;
         minute = 0;
+        setArrivals = 0;
+        setElecArrivals = 0;
+        setPassArrivals = 0;
+        setResArrivals = 0;
         
         //niet tick(); gebruiken want dan gaat de tijd 1 minuut vooruit als je
         //op de reset knop klikt.
@@ -291,12 +304,13 @@ public class Model extends AbstractModel implements Runnable{
 			//als de gebruiker het venster sluit is option == -1
 			//dus dan niks doen
 		}
+		
 		if(option == 6) {
 			dayPref = 1;
 			System.out.println(day);
 			reset();
 		}
-		else {
+		else if(option != -1){
 			//als option iets anders is dan -1 heeft de gebruiker een keuze gemaakt
 			//dagen zijn 1-indexed en beginnen bij zondag
 			//de array met dagen is 0-indexed en begint bij maandag
@@ -305,6 +319,34 @@ public class Model extends AbstractModel implements Runnable{
 			System.out.println(day);
 			reset();
 		}
+	}
+	
+	public void setCarSpeed() {
+		JTextField normal = new JTextField();
+		JTextField elec = new JTextField();
+		JTextField pass = new JTextField();
+		JTextField res = new JTextField();
+		
+		normal.setText("0");
+		elec.setText("0");
+		pass.setText("0");
+		res.setText("0");
+		
+		Object[] message = {
+		    "Aantal normale auto's:", normal,
+		    "Aantal electrische auto's:" , elec,
+		    "Aantal pashouders:" , pass,
+		    "Aantal gereserveerde auto's:" , res
+		};
+
+		int option = JOptionPane.showConfirmDialog(null, message, "Aantal auto's", JOptionPane.OK_CANCEL_OPTION);
+		if (option == JOptionPane.OK_OPTION) {
+		    setArrivals = Integer.valueOf(normal.getText());
+		    setElecArrivals = Integer.valueOf(elec.getText());
+		    setPassArrivals = Integer.valueOf(pass.getText());
+		    setResArrivals = Integer.valueOf(res.getText());
+		} 
+			  
 	}
 	
 	public void run() {
@@ -355,6 +397,15 @@ public class Model extends AbstractModel implements Runnable{
     	
     	timeHandling();
     	handleJLabel();
+    	
+    	if(entranceCarQueue.carsInQueue() > 10) {
+    		entranceCarQueue.emptyQueue();
+    	}
+        
+    	if(entrancePassQueue.carsInQueue() > 10) {
+    		entrancePassQueue.emptyQueue();
+    	}
+    	
     }
     
     private void handleJLabel() {
@@ -424,62 +475,69 @@ public class Model extends AbstractModel implements Runnable{
     }
     
     private void timeHandling() {
-    	if(hour >= 7 && hour < 16) {
-    		weekDayArrivals = 200;
-    		weekDayPassArrivals = 50;
-    		
-    		weekendArrivals = 100;
-    		weekendPassArrivals = 55;
-    		
-    		weekResArrivals = 30;
-    		weekendResArrivals = 20;
-    		
-    	    weekElecArrivals = 30;
-    	    weekendElecArrivals = 20;
-    	}
-    	else {
-    		weekDayArrivals = 20;
-    		weekDayPassArrivals = 10;
-    		
-    		weekResArrivals = 3;
-    		weekendResArrivals = 2;
-    		
-    		weekendArrivals = 20;
-    		weekendPassArrivals = 15;
-    		
-    	    weekElecArrivals = 5;
-    	    weekendElecArrivals = 15;
-    	}
-    	
-    	if(day == 5 && hour >= 18 && hour < 23|| day == 6 && hour >= 18 && hour < 23 || day == 7 && hour >= 18 && hour < 23 || day == 0 && hour > 13 && hour < 18) {
-    		weekDayArrivals = 350;
-    		weekDayPassArrivals = 20;
-    		
-    		weekResArrivals = 20;
-    		weekendResArrivals = 15;
-    		
-    		weekendArrivals = 350;
-    		weekendPassArrivals = 20;
-    		
-    		weekElecArrivals = 10;
-    	    weekendElecArrivals = 10;
-    	}
-    	else if(day == 5 && hour >= 23 || day == 6 && hour >= 23 || day == 7 && hour >= 23) {
-    		weekDayArrivals = 20;
-    		weekDayPassArrivals = 10;
-    		
-    		weekResArrivals = 30;
-    		weekendResArrivals = 20;
-    		
-    		weekendArrivals = 20;
-    		weekendPassArrivals = 10;
-    		
-    		weekElecArrivals = 10;
-    	    weekendElecArrivals = 20;
-    	}
-//    	
     	setTimeText();
-
+    	if(setArrivals == 0 && setElecArrivals == 0 && setPassArrivals == 0 && setResArrivals == 0) {
+	    	if(hour >= 7 && hour < 16) {
+	    		weekDayArrivals = 200;
+	    		weekDayPassArrivals = 50;
+	    		
+	    		weekendArrivals = 100;
+	    		weekendPassArrivals = 55;
+	    		
+	    		weekResArrivals = 30;
+	    		weekendResArrivals = 20;
+	    		
+	    	    weekElecArrivals = 30;
+	    	    weekendElecArrivals = 20;
+	    	}
+	    	else {
+	    		weekDayArrivals = 20;
+	    		weekDayPassArrivals = 10;
+	    		
+	    		weekResArrivals = 3;
+	    		weekendResArrivals = 2;
+	    		
+	    		weekendArrivals = 20;
+	    		weekendPassArrivals = 15;
+	    		
+	    	    weekElecArrivals = 5;
+	    	    weekendElecArrivals = 15;
+	    	}
+	    	
+	    	if(day == 5 && hour >= 18 && hour < 20|| day == 6 && hour >= 18 && hour < 20 || day == 7 && hour >= 18 && hour < 20 || day == 0 && hour > 13 && hour < 18) {
+	    		weekDayArrivals = 350;
+	    		weekDayPassArrivals = 80;
+	    		
+	    		weekResArrivals = 40;
+	    		weekendResArrivals = 30;
+	    		
+	    		weekendArrivals = 350;
+	    		weekendPassArrivals = 80;
+	    		
+	    		weekElecArrivals = 40;
+	    	    weekendElecArrivals = 30;
+	    	}
+	    	else if(day == 5 && hour >= 21 || day == 6 && hour >= 21 || day == 7 && hour >= 21 || day == 0 && hour < 13 && hour > 18) {
+	    		weekDayArrivals = 20;
+	    		weekDayPassArrivals = 10;
+	    		
+	    		weekResArrivals = 30;
+	    		weekendResArrivals = 20;
+	    		
+	    		weekendArrivals = 20;
+	    		weekendPassArrivals = 10;
+	    		
+	    		weekElecArrivals = 10;
+	    	    weekendElecArrivals = 20;
+	    	}
+    	}else{
+    		weekDayArrivals = setArrivals;
+    		weekDayPassArrivals = setPassArrivals;
+    		
+    		weekResArrivals = setResArrivals;
+    		
+    		weekElecArrivals = setElecArrivals;
+    	}
     }
     
     public LinkedList<Integer> getLineDataNormal() {
