@@ -64,14 +64,17 @@ public class Controller extends AbstractController implements ActionListener{
 		timeScale.setMinorTickSpacing(5);
 		
 		this.setLayout(new FlowLayout());
-		add(switchGraphs);
-		add(setEntreeSpeedButton);
-		add(setDayButton);
 		add(startButton);
 		add(stopButton);
 		add(resetButton);
-		add(closeButton);
+		
+		add(switchGraphs);
+		add(setEntreeSpeedButton);
+		add(setDayButton);
+
+
 		add(timeScale);
+		add(closeButton);
 		
 		
 		//setVisible(true);

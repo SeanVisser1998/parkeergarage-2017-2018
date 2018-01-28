@@ -272,6 +272,7 @@ package view;
 
 import logic.Model;
 
+@SuppressWarnings("serial")
 public class LineGraph extends AbstractView {
 	public LineGraph(Model model){
 		super(model);

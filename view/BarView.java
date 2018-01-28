@@ -43,6 +43,7 @@ public class BarView extends AbstractView{
 		return new Dimension(200,262);
 	}
 	
+	@SuppressWarnings("unused")
 	private int getSize(int totaalAuto) {
 		int totaal = model.getNumberOfFloors() * model.getNumberOfRows() * model.getNumberOfPlaces();
 		double size = 1.0 * (double) totaalAuto;

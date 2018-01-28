@@ -2,7 +2,6 @@ package logic;
 
 import java.util.ArrayList;
 import view.AbstractView;
-import view.LineGraph;
 
 public abstract class AbstractModel {
 private ArrayList<AbstractView> views;
