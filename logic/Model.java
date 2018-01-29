@@ -453,11 +453,9 @@ public class Model extends AbstractModel implements Runnable{
             hour -= 24;
             day++;
         }
-        while (day > 6) {
+        while (day > 7) {
             day -= 7;
         }
-        	
-
     }
     
     public int returnMinute() {
@@ -473,7 +471,7 @@ public class Model extends AbstractModel implements Runnable{
     	if(setArrivals == 0 && setElecArrivals == 0 && setPassArrivals == 0 && setResArrivals == 0) {
 	    	if(hour >= 7 && hour < 16) {
 	    		weekDayArrivals = 200;
-	    		weekendArrivals = 100;
+	    		weekendArrivals = 200;
 	    		
 	    		
 	    		weekDayPassArrivals = 50;
@@ -498,8 +496,22 @@ public class Model extends AbstractModel implements Runnable{
 	    	    weekElecArrivals = 5;
 	    	    weekendElecArrivals = 15;
 	    	}
+	    	if(hour >= 9 && hour < 18 && day == 7 || hour >= 9 && hour < 13 && day == 0) {
+	    		weekDayArrivals = 100;
+	    		weekendArrivals = 100;
+	    		
+	    		
+	    		weekDayPassArrivals = 50;
+	    		weekendPassArrivals = 55;
+	    		
+	    		weekResArrivals = 30;
+	    		weekendResArrivals = 20;
+	    		
+	    	    weekElecArrivals = 30;
+	    	    weekendElecArrivals = 20;
+	    	}
 	    	
-	    	if(day == 5 && hour >= 18 && hour < 20|| day == 6 && hour >= 18 && hour < 20 || day == 7 && hour >= 18 && hour < 20 || day == 0 && hour > 13 && hour < 18) {
+	    	if(day == 5 && hour >= 18 && hour < 22|| day == 6 && hour >= 18 && hour < 22 || day == 7 && hour >= 18 && hour < 22 || day == 0 && hour > 13 && hour < 18) {
 	    		weekDayArrivals = 350;
 	    		weekDayPassArrivals = 80;
 	    		
@@ -512,7 +524,7 @@ public class Model extends AbstractModel implements Runnable{
 	    		weekElecArrivals = 40;
 	    	    weekendElecArrivals = 30;
 	    	}
-	    	else if(day == 5 && hour >= 21 || day == 6 && hour >= 21 || day == 7 && hour >= 21 || day == 0 && hour < 13 && hour > 18) {
+	    	else if(day == 5 && hour >= 22 || day == 6 && hour >= 22 || day == 7 && hour >= 22 || day == 0 && hour < 13 && hour > 18) {
 	    		weekDayArrivals = 20;
 	    		weekDayPassArrivals = 10;
 	    		
@@ -530,8 +542,13 @@ public class Model extends AbstractModel implements Runnable{
     		weekDayPassArrivals = setPassArrivals;
     		
     		weekResArrivals = setResArrivals;
+    		weekendResArrivals = setResArrivals;
     		
     		weekElecArrivals = setElecArrivals;
+    		weekendElecArrivals = setElecArrivals;
+    		
+    		weekendArrivals = setArrivals;
+    		weekendPassArrivals = setPassArrivals;
     	}
     }
     
