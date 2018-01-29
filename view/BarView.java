@@ -32,6 +32,8 @@ public class BarView extends AbstractView{
 	LinkedList<Integer> dataElectric;
 	LinkedList<Integer> dataAll;
 	
+	private boolean isReset = false;
+	
 	int counter = 0;
 	
 	public BarView(Model model) {
@@ -144,6 +146,16 @@ public class BarView extends AbstractView{
 				System.out.println("Er is iets mis gegaan! - "+e);
 			}
 			clearLinkedLists();
+		}
+		isReset = false;
+		if(model.returnHour() == 0 && model.returnMinute() == 0 && isReset == false) {
+			clearLinkedLists();
+			drawLineGraph(g, dataAll, Color.CYAN);
+			drawLineGraph(g, dataNormal, AdHocCar.returnColor());
+			drawLineGraph(g, dataPass, ParkingPassCar.returnColor());
+			drawLineGraph(g, dataReserved, ReservedCar.returnTextColor());
+			drawLineGraph(g, dataElectric, ElecCar.returnTextColor());
+			isReset = true;
 		}
 	}
 	
